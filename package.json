@@ -1,5 +1,5 @@
 {
-	"name": "express js project template",
+	"name": "kedaireka backend",
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
@@ -9,6 +9,7 @@
 		"dev": "nodemon app.ts",
 		"migrate:up": "npx sequelize-cli db:migrate",
 		"migrate:undo": "npx sequelize-cli db:migrate:undo",
+		"seed" : "npx sequelize-cli db:seed:all",
 		"lint:fix": "eslint --fix ./*.ts"
 	},
 	"keywords": [
