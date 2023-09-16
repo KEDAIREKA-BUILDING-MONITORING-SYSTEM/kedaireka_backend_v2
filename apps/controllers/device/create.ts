@@ -1,12 +1,9 @@
 import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
-import { requestChecker } from '../../utilities/requestCheker'
-import { v4 as uuidv4 } from 'uuid'
-import { CrudExampleModel, type CrudExampleAttributes } from '../../models/crudExample'
 
 export const createDevice = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body 
+  const requestBody = req.body
 
   console.log(requestBody)
 
