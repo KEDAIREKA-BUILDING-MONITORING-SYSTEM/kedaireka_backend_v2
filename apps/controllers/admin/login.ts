@@ -101,7 +101,6 @@ export const loginAdmin = async (req: any, res: Response): Promise<any> => {
     response.data = responseData
     return res.status(StatusCodes.OK).json(response)
   } catch (error: any) {
-    console.log(error.message)
     const message = `unable to process request! error ${error.message}`
     const response = ResponseData.error(message)
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response)
