@@ -15,14 +15,14 @@ import { ResponseData } from '../../utilities/response'
 const checkFileSizeMidleWare = (req: Request, res: Response, next: NextFunction) => {
   try {
     if (req.file != null) {
-      const fileSizeKiloBytes = req.file.size / 1024
-      if (fileSizeKiloBytes > +CONFIG.maximumUploadFile) {
+      const fileSizeInKiloBytes = req.file.size / 1024
+      if (fileSizeInKiloBytes > +CONFIG.maximumUploadFile) {
         throw Error('maksimum file 2mb')
       }
       next()
     }
   } catch (error: any) {
-    const message = 'maksimum file 2mbw'
+    const message = 'maksimum file 2mb'
     const response = ResponseData.error(message)
     return res.status(StatusCodes.UNAUTHORIZED).json(response)
   }
