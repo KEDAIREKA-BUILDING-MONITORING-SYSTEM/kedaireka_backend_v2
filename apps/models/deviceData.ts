@@ -14,18 +14,18 @@ export interface DeviceDataAttributes extends ZygoteAttributes {
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
-type DeviceCreationAttributes = Optional<
+type DeviceDataCreationAttributes = Optional<
   DeviceDataAttributes,
   'id' | 'createdAt' | 'updatedAt'
 >
 
 // We need to declare an interface for our model that is basically what our class would be
-interface DeviceInstance
-  extends Model<DeviceDataAttributes, DeviceCreationAttributes>,
+interface DeviceDataInstance
+  extends Model<DeviceDataAttributes, DeviceDataCreationAttributes>,
     DeviceDataAttributes {}
 
-export const DeviceModel = sequelize.define<DeviceInstance>(
-  'device',
+export const DeviceDataModel = sequelize.define<DeviceDataInstance>(
+  'device_data',
   {
     ...ZygoteModel,
     deviceId: {
@@ -52,7 +52,7 @@ export const DeviceModel = sequelize.define<DeviceInstance>(
   {
     ...sequelize,
     timestamps: false,
-    tableName: 'device',
+    tableName: 'device_data',
     deletedAt: false,
     paranoid: true,
     underscored: true,
