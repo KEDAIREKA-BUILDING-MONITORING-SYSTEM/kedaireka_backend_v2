@@ -3,13 +3,13 @@ import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
 import { Op } from 'sequelize'
 import { requestChecker } from '../../utilities/requestCheker'
-import { CrudExampleModel, type CrudExampleAttributes } from '../../models/crudExample'
+import { DeviceModel, type DeviceAttributes } from '../../models/device'
 
-export const updateCrudExample = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as CrudExampleAttributes
+export const updateDevice = async (req: any, res: Response): Promise<any> => {
+  const requestBody = req.body as DeviceAttributes
 
   const emptyField = requestChecker({
-    requireList: ['crudExampleId'],
+    requireList: ['deviceId'],
     requestData: requestBody
   })
 
@@ -20,10 +20,10 @@ export const updateCrudExample = async (req: any, res: Response): Promise<any> =
   }
 
   try {
-    const result = await CrudExampleModel.findOne({
+    const result = await DeviceModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        crudExampleId: { [Op.eq]: requestBody.crudExampleId }
+        deviceId: { [Op.eq]: requestBody.deviceId }
       }
     })
 
@@ -33,16 +33,16 @@ export const updateCrudExample = async (req: any, res: Response): Promise<any> =
       return res.status(StatusCodes.NOT_FOUND).json(response)
     }
 
-    const newData: CrudExampleAttributes | any = {
-      ...(requestBody.crudExampleName.length > 0 && {
-        crudExampleName: requestBody.crudExampleName
+    const newData: DeviceAttributes | any = {
+      ...(requestBody.deviceName.length > 0 && {
+        deviceName: requestBody.deviceName
       })
     }
 
-    await CrudExampleModel.update(newData, {
+    await DeviceModel.update(newData, {
       where: {
         deleted: { [Op.eq]: 0 },
-        crudExampleId: { [Op.eq]: requestBody.crudExampleId }
+        deviceId: { [Op.eq]: requestBody.deviceId }
       }
     })
 
