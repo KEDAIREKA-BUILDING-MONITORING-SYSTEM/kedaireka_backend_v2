@@ -14,6 +14,6 @@ BACKEND KEDAIREKA BUILDING MONITORING SYSTEM
 -   Run command `npm run dev`
 
 ## How to Run Migration
--   config your database in this file apps/resources/config/databases.js
+-   config your database in this file `apps/resources/config/databases.js`
 -   if you are using linux or mac run command `./run_migration.sh`
 -   if you are using windows run command `run_migration.bat`
