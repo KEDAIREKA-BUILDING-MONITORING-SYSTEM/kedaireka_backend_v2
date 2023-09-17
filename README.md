@@ -2,12 +2,12 @@ BACKEND KEDAIREKA BUILDING MONITORING SYSTEM
 
 ## Preparation
 
--   Copy file `.env.example` to `.env`. Then fill the value.
+-   Copy file `.env.example` to `.env`. And then fill the value.
 
 ## How to install app
 
--   if you are using linux or mac run command `./init.sh`
--   if you are using windows run command `init.bat`
+-   if you are using linux or mac run this command `./init.sh`
+-   if you are using windows run this command `init.bat`
 
 ## How to Run App in development mode
 
