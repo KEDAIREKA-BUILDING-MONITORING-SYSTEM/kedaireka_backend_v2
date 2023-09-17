@@ -8,11 +8,23 @@ export const deviceRouter = (app: Express) => {
   app.use('/api/v1/devices', route)
 
   route.get(
-    '/',
-    async (req: Request, res: Response) => await deviceController.create(req, res)
+    '/list',
+    async (req: Request, res: Response) => await deviceController.findAll(req, res)
+  )
+  route.get(
+    '/detail/:deviceId',
+    async (req: Request, res: Response) => await deviceController.findOne(req, res)
   )
   route.post(
     '/',
     async (req: Request, res: Response) => await deviceController.create(req, res)
+  )
+  route.patch(
+    '/',
+    async (req: Request, res: Response) => await deviceController.update(req, res)
+  )
+  route.delete(
+    '/',
+    async (req: Request, res: Response) => await deviceController.remove(req, res)
   )
 }

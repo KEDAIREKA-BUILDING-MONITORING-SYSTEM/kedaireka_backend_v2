@@ -3,13 +3,13 @@ import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
 import { Op } from 'sequelize'
 import { requestChecker } from '../../utilities/requestCheker'
-import { type CrudExampleAttributes, CrudExampleModel } from '../../models/crudExample'
+import { DeviceModel, type DeviceAttributes } from '../../models/device'
 
-export const removeCrudExample = async (req: any, res: Response): Promise<any> => {
-  const requestQuery = req.query as CrudExampleAttributes
+export const removeDevice = async (req: any, res: Response): Promise<any> => {
+  const requestQuery = req.query as DeviceAttributes
 
   const emptyField = requestChecker({
-    requireList: ['crudExampleId'],
+    requireList: ['deviceId'],
     requestData: requestQuery
   })
 
@@ -20,10 +20,10 @@ export const removeCrudExample = async (req: any, res: Response): Promise<any> =
   }
 
   try {
-    const result = await CrudExampleModel.findOne({
+    const result = await DeviceModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        crudExampleId: { [Op.eq]: requestQuery.crudExampleId }
+        deviceId: { [Op.eq]: requestQuery.deviceId }
       }
     })
 

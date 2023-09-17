@@ -1,7 +1,7 @@
 import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
-import { type DeviceAttributes } from '../../models/device'
+import { DeviceModel, type DeviceAttributes } from '../../models/device'
 import { requestChecker } from '../../utilities/requestCheker'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -20,8 +20,8 @@ export const createDevice = async (req: any, res: Response): Promise<any> => {
   }
 
   try {
-    requestBody.crudExampleId = uuidv4()
-    await CrudExampleModel.create(requestBody)
+    requestBody.deviceId = uuidv4()
+    await DeviceModel.create(requestBody)
 
     const response = ResponseData.default
     const result = { message: 'success' }
