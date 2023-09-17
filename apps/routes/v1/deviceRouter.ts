@@ -12,6 +12,10 @@ export const deviceRouter = (app: Express) => {
     async (req: Request, res: Response) => await deviceController.findAll(req, res)
   )
   route.get(
+    '/statistic',
+    async (req: Request, res: Response) => await deviceController.statistic(req, res)
+  )
+  route.get(
     '/detail/:deviceId',
     async (req: Request, res: Response) => await deviceController.findOne(req, res)
   )
