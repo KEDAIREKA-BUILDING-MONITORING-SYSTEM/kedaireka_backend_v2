@@ -18,15 +18,23 @@ module.exports = {
         allowNull: false
       },
       device_type: {
-        type: Sequelize.ENUM('dht', 'mq2'),
+        type: Sequelize.STRING(100),
         allowNull: false
       },
       device_category: {
-        type: Sequelize.ENUM('input', 'output'),
+        type: Sequelize.STRING(100),
         allowNull: false
       },
       device_value: {
         type: Sequelize.JSON,
+        allowNull: false
+      },
+      device_building: {
+        type: Sequelize.STRING(80),
+        allowNull: false
+      },
+      device_room: {
+        type: Sequelize.INTEGER,
         allowNull: false
       }
     })

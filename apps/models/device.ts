@@ -9,7 +9,9 @@ export interface DeviceAttributes extends ZygoteAttributes {
   deviceName: string
   deviceType: 'dht' | 'mq2'
   deviceCategory: 'input' | 'output'
-  deviceValue: string
+  deviceValue: string,
+  deviceBuilding: string;
+  deviceRoom: number
 }
 
 // we're telling the Model that 'id' is optional
@@ -46,6 +48,14 @@ export const DeviceModel = sequelize.define<DeviceInstance>(
     },
     deviceValue: {
       type: DataTypes.JSON,
+      allowNull: false
+    },
+    deviceBuilding: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    deviceRoom: {
+      type: DataTypes.STRING(100),
       allowNull: false
     }
   },
