@@ -9,6 +9,7 @@ export const useAuthorization = (
   next: NextFunction
 ): any => {
   try {
+    console.log(req)
     if (
       req.header('authorization') == null ||
       // eslint-disable-next-line @typescript-eslint/prefer-includes
