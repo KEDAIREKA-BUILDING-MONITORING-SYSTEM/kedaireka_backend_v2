@@ -36,6 +36,18 @@ export const updateDevice = async (req: any, res: Response): Promise<any> => {
     const newData: DeviceAttributes | any = {
       ...(requestBody.deviceName.length > 0 && {
         deviceName: requestBody.deviceName
+      }),
+      ...(requestBody.deviceType.length > 0 && {
+        deviceType: requestBody.deviceType
+      }),
+      ...(requestBody.deviceCategory.length > 0 && {
+        deviceCategory: requestBody.deviceCategory
+      }),
+      ...(requestBody.deviceRoom > 0 && {
+        deviceRoom: requestBody.deviceRoom
+      }),
+      ...(requestBody.deviceBuilding.length > 0 && {
+        deviceBuilding: requestBody.deviceBuilding
       })
     }
 
