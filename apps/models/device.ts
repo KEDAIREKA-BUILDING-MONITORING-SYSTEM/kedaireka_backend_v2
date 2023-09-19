@@ -7,11 +7,12 @@ import { type ZygoteAttributes, ZygoteModel } from './zygote'
 export interface DeviceAttributes extends ZygoteAttributes {
   deviceId: string
   deviceName: string
-  deviceType: 'dht' | 'mq2'
-  deviceCategory: 'input' | 'output'
-  deviceValue: string,
-  deviceBuilding: string;
+  deviceType: string
+  deviceCategory: string
+  deviceBuilding: string
   deviceRoom: number
+  deviceStatus: number
+  deviceToken: string
 }
 
 // we're telling the Model that 'id' is optional
@@ -39,15 +40,11 @@ export const DeviceModel = sequelize.define<DeviceInstance>(
       allowNull: false
     },
     deviceType: {
-      type: DataTypes.ENUM('dht', 'mq2'),
+      type: DataTypes.STRING(80),
       allowNull: false
     },
     deviceCategory: {
-      type: DataTypes.ENUM('input', 'output'),
-      allowNull: false
-    },
-    deviceValue: {
-      type: DataTypes.JSON,
+      type: DataTypes.STRING(80),
       allowNull: false
     },
     deviceBuilding: {
@@ -57,7 +54,16 @@ export const DeviceModel = sequelize.define<DeviceInstance>(
     deviceRoom: {
       type: DataTypes.STRING(100),
       allowNull: false
-    }
+    },
+    deviceStatus: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true ,
+      defaultValue: 0
+    },
+    deviceToken: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
   },
   {
     ...sequelize,

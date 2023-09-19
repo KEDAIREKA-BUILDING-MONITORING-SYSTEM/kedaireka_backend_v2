@@ -13,7 +13,6 @@ export const createDevice = async (req: any, res: Response): Promise<any> => {
       'deviceName',
       'deviceType',
       'deviceCategory',
-      'deviceValue',
       'deviceBuilding',
       'deviceRoom'
     ],
@@ -27,7 +26,9 @@ export const createDevice = async (req: any, res: Response): Promise<any> => {
   }
 
   try {
+    requestBody.deviceStatus = 0
     requestBody.deviceId = uuidv4()
+    requestBody.deviceToken = uuidv4()
     await DeviceModel.create(requestBody)
 
     const response = ResponseData.default

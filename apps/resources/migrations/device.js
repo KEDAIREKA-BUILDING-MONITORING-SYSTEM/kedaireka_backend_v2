@@ -25,10 +25,6 @@ module.exports = {
         type: Sequelize.STRING(100),
         allowNull: false
       },
-      device_value: {
-        type: Sequelize.JSON,
-        allowNull: false
-      },
       device_building: {
         type: Sequelize.STRING(80),
         allowNull: false
@@ -36,7 +32,16 @@ module.exports = {
       device_room: {
         type: Sequelize.INTEGER,
         allowNull: false
-      }
+      },
+      device_status: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true ,
+        defaultValue: 0
+      },
+      device_token: {
+        type: Sequelize.STRING(250),
+        allowNull: false
+      },
     })
   },
   async down(queryInterface, Sequelize) {

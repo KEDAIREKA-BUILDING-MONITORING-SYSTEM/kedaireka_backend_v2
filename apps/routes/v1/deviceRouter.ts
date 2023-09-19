@@ -22,6 +22,10 @@ export const deviceRouter = (app: Express) => {
   route.patch(
     '/',
     async (req: Request, res: Response) => await deviceController.update(req, res)
+  ),
+  route.patch(
+    '/token',
+    async (req: Request, res: Response) => await deviceController.updateToken(req, res)
   )
   route.delete(
     '/',
