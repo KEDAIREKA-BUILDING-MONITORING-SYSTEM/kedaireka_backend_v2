@@ -5,7 +5,9 @@ import { Op } from 'sequelize'
 import { Pagination } from '../../utilities/pagination'
 import { requestChecker } from '../../utilities/requestCheker'
 import { CONSOLE } from '../../utilities/log'
-import { type DeviceAttributes, DeviceModel } from '../../models/device'
+import { type DeviceAttributes, DeviceModel } from '../../models/devices'
+import { DeviceLogModel } from '../../models/deviceLogs'
+import { DeviceSensorsModel } from '../../models/deviceSensors'
 
 export const findAllAllDevice = async (req: any, res: Response): Promise<any> => {
   try {
@@ -20,6 +22,15 @@ export const findAllAllDevice = async (req: any, res: Response): Promise<any> =>
           [Op.or]: [{ deviceName: { [Op.like]: `%${req.query.search}%` } }]
         })
       },
+      attributes: [
+        'createdAt',
+        'updatedAt',
+        'deviceId',
+        'deviceName',
+        'deviceBuilding',
+        'deviceRoom',
+        'deviceToken'
+      ],
       order: [['id', 'desc']],
       ...(req.query.pagination === 'true' && {
         limit: page.limit,
@@ -57,11 +68,31 @@ export const findOneDevice = async (req: any, res: Response): Promise<any> => {
       where: {
         deleted: { [Op.eq]: 0 },
         deviceId: { [Op.eq]: requestParams.deviceId }
-      }
+      },
+      include: [
+        {
+          model: DeviceLogModel,
+          attributes: ['createdAt', 'deviceLogId', 'deviceLogDeviceId', 'deviceLogValue'],
+          as: 'deviceLogs'
+        },
+        {
+          model: DeviceSensorsModel,
+          attributes: [
+            'createdAt',
+            'deviceSensorId',
+            'deviceSensorDeviceId',
+            'deviceSensorName',
+            'deviceSensorCategory',
+            'deviceSensorPort',
+            'deviceSensorStatus'
+          ],
+          as: 'deviceSensors'
+        }
+      ]
     })
 
     if (result == null) {
-      const message = 'not found!'
+      const message = 'device not found!'
       const response = ResponseData.error(message)
       return res.status(StatusCodes.NOT_FOUND).json(response)
     }

@@ -1,21 +1,23 @@
 import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
-import { DeviceModel, type DeviceAttributes } from '../../models/device'
 import { requestChecker } from '../../utilities/requestCheker'
 import { v4 as uuidv4 } from 'uuid'
+import {
+  DeviceSensorsModel,
+  type DeviceSensorsAttributes
+} from '../../models/deviceSensors'
 
-export const createDevice = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as DeviceAttributes
+export const createDeviceSensor = async (req: any, res: Response): Promise<any> => {
+  const requestBody = req.body as DeviceSensorsAttributes
 
   const emptyField = requestChecker({
     requireList: [
-      'deviceName',
-      'deviceType',
-      'deviceCategory',
-      'deviceValue',
-      'deviceBuilding',
-      'deviceRoom'
+      'deviceSensorDeviceId',
+      'deviceSensorName',
+      'deviceSensorCategory',
+      'deviceSensorPort',
+      'deviceSensorStatus'
     ],
     requestData: requestBody
   })
@@ -27,9 +29,8 @@ export const createDevice = async (req: any, res: Response): Promise<any> => {
   }
 
   try {
-    requestBody.deviceId = uuidv4()
-    await DeviceModel.create(requestBody)
-
+    requestBody.deviceSensorId = uuidv4()
+    await DeviceSensorsModel.create(requestBody)
     const response = ResponseData.default
     const result = { message: 'success' }
     response.data = result
