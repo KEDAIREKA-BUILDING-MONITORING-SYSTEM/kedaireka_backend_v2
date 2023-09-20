@@ -1,15 +1,21 @@
 import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
+import { DeviceModel, type DeviceAttributes } from '../../models/devices'
 import { requestChecker } from '../../utilities/requestCheker'
 import { v4 as uuidv4 } from 'uuid'
-import { CrudExampleModel, type CrudExampleAttributes } from '../../models/crudExample'
 
-export const createCrudExample = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as CrudExampleAttributes
+export const createDevice = async (req: any, res: Response): Promise<any> => {
+  const requestBody = req.body as DeviceAttributes
 
   const emptyField = requestChecker({
-    requireList: ['crudExampleName'],
+    requireList: [
+      'deviceName',
+      'deviceType',
+      'deviceCategory',
+      'deviceBuilding',
+      'deviceRoom'
+    ],
     requestData: requestBody
   })
 
@@ -20,8 +26,9 @@ export const createCrudExample = async (req: any, res: Response): Promise<any> =
   }
 
   try {
-    requestBody.crudExampleId = uuidv4()
-    await CrudExampleModel.create(requestBody)
+    requestBody.deviceId = uuidv4()
+    requestBody.deviceToken = uuidv4()
+    await DeviceModel.create(requestBody)
 
     const response = ResponseData.default
     const result = { message: 'success' }

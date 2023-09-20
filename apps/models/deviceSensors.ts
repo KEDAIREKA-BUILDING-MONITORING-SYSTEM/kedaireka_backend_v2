@@ -4,55 +4,60 @@ import { DataTypes, type Model, type Optional } from 'sequelize'
 import { sequelize } from '.'
 import { type ZygoteAttributes, ZygoteModel } from './zygote'
 
-export interface DeviceDataAttributes extends ZygoteAttributes {
-  deviceId: string
-  deviceName: string
-  deviceType: 'dht' | 'mq2'
-  deviceCategory: 'input' | 'output'
-  deviceValue: string
+export interface DeviceSensorsAttributes extends ZygoteAttributes {
+  deviceSensorId: string
+  deviceSensorDeviceId: string
+  deviceSensorName: string
+  deviceSensorCategory: string
+  deviceSensorPort: number
+  deviceSensorStatus: boolean
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
-type DeviceDataCreationAttributes = Optional<
-  DeviceDataAttributes,
+type DeviceSensorsCreationAttributes = Optional<
+  DeviceSensorsAttributes,
   'id' | 'createdAt' | 'updatedAt'
 >
 
 // We need to declare an interface for our model that is basically what our class would be
-interface DeviceDataInstance
-  extends Model<DeviceDataAttributes, DeviceDataCreationAttributes>,
-    DeviceDataAttributes {}
+interface DeviceSensorsInstance
+  extends Model<DeviceSensorsAttributes, DeviceSensorsCreationAttributes>,
+    DeviceSensorsAttributes {}
 
-export const DeviceDataModel = sequelize.define<DeviceDataInstance>(
-  'device_data',
+export const DeviceSensorsModel = sequelize.define<DeviceSensorsInstance>(
+  'device_sensors',
   {
     ...ZygoteModel,
-    deviceId: {
+    deviceSensorId: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    deviceName: {
+    deviceSensorDeviceId: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    deviceType: {
-      type: DataTypes.ENUM('dht', 'mq2'),
+    deviceSensorName: {
+      type: DataTypes.STRING(80),
       allowNull: false
     },
-    deviceCategory: {
-      type: DataTypes.ENUM('input', 'output'),
+    deviceSensorCategory: {
+      type: DataTypes.STRING(80),
       allowNull: false
     },
-    deviceValue: {
-      type: DataTypes.JSON,
+    deviceSensorPort: {
+      type: DataTypes.NUMBER,
+      allowNull: false
+    },
+    deviceSensorStatus: {
+      type: DataTypes.BOOLEAN,
       allowNull: false
     }
   },
   {
     ...sequelize,
     timestamps: false,
-    tableName: 'device_data',
+    tableName: 'device_sensors',
     deletedAt: false,
     paranoid: true,
     underscored: true,

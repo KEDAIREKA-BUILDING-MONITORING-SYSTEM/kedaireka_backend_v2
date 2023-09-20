@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
 import { Op } from 'sequelize'
 import { requestChecker } from '../../utilities/requestCheker'
-import { DeviceModel, type DeviceAttributes } from '../../models/device'
+import { DeviceModel, type DeviceAttributes } from '../../models/devices'
 import { v4 as uuidv4 } from 'uuid'
 
 export const updateDevice = async (req: any, res: Response): Promise<any> => {
@@ -38,13 +38,7 @@ export const updateDevice = async (req: any, res: Response): Promise<any> => {
       ...(requestBody.deviceName.length > 0 && {
         deviceName: requestBody.deviceName
       }),
-      ...(requestBody.deviceType.length > 0 && {
-        deviceType: requestBody.deviceType
-      }),
-      ...(requestBody.deviceCategory.length > 0 && {
-        deviceCategory: requestBody.deviceCategory
-      }),
-      ...(requestBody.deviceRoom > 0 && {
+      ...(requestBody.deviceRoom.length > 0 && {
         deviceRoom: requestBody.deviceRoom
       }),
       ...(requestBody.deviceBuilding.length > 0 && {
@@ -68,7 +62,6 @@ export const updateDevice = async (req: any, res: Response): Promise<any> => {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response)
   }
 }
-
 
 export const updateDeviceToken = async (req: any, res: Response): Promise<any> => {
   const requestBody = req.body as DeviceAttributes
@@ -99,7 +92,7 @@ export const updateDeviceToken = async (req: any, res: Response): Promise<any> =
     }
 
     device.deviceToken = uuidv4()
-    device.save()
+    void device.save()
     const response = ResponseData.default
     response.data = { message: 'success' }
     return res.status(StatusCodes.OK).json(response)

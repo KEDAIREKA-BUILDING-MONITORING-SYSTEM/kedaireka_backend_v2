@@ -5,19 +5,20 @@ import { Op } from 'sequelize'
 import { Pagination } from '../../utilities/pagination'
 import { requestChecker } from '../../utilities/requestCheker'
 import { CONSOLE } from '../../utilities/log'
-import { type CrudExampleAttributes, CrudExampleModel } from '../../models/crudExample'
+import { DeviceLogModel } from '../../models/deviceLogs'
+import { type DeviceAttributes, DeviceModel } from '../../models/devices'
 
-export const findAllCrudExample = async (req: any, res: Response): Promise<any> => {
+export const findAllAllDeviceLog = async (req: any, res: Response): Promise<any> => {
   try {
     const page = new Pagination(
       parseInt(req.query.page) ?? 0,
       parseInt(req.query.size) ?? 10
     )
-    const result = await CrudExampleModel.findAndCountAll({
+    const result = await DeviceLogModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
         ...(Boolean(req.query.search) && {
-          [Op.or]: [{ crudExampleName: { [Op.like]: `%${req.query.search}%` } }]
+          [Op.or]: [{ deviceName: { [Op.like]: `%${req.query.search}%` } }]
         })
       },
       order: [['id', 'desc']],
@@ -38,11 +39,11 @@ export const findAllCrudExample = async (req: any, res: Response): Promise<any> 
   }
 }
 
-export const findOneCrudExample = async (req: any, res: Response): Promise<any> => {
-  const requestParams = req.params as CrudExampleAttributes
+export const findDeviceLogs = async (req: any, res: Response): Promise<any> => {
+  const requestParams = req.params as DeviceAttributes
 
   const emptyField = requestChecker({
-    requireList: ['crudExampleId'],
+    requireList: ['deviceId'],
     requestData: requestParams
   })
 
@@ -53,11 +54,18 @@ export const findOneCrudExample = async (req: any, res: Response): Promise<any> 
   }
 
   try {
-    const result = await CrudExampleModel.findOne({
+    const result = await DeviceModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        crudExampleId: { [Op.eq]: requestParams.crudExampleId }
-      }
+        deviceId: { [Op.eq]: requestParams.deviceId }
+      },
+      include: [
+        {
+          model: DeviceLogModel,
+          attributes: ['createdAt', 'deviceLogId', 'deviceLogDeviceId', 'deviceLogValue'],
+          as: 'deviceLogs'
+        }
+      ]
     })
 
     if (result == null) {

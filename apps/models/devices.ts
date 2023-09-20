@@ -3,15 +3,14 @@ import moment from 'moment'
 import { DataTypes, type Model, type Optional } from 'sequelize'
 import { sequelize } from '.'
 import { type ZygoteAttributes, ZygoteModel } from './zygote'
+import { DeviceLogModel } from './deviceLogs'
+import { DeviceSensorsModel } from './deviceSensors'
 
 export interface DeviceAttributes extends ZygoteAttributes {
   deviceId: string
   deviceName: string
-  deviceType: string
-  deviceCategory: string
   deviceBuilding: string
-  deviceRoom: number
-  deviceStatus: number
+  deviceRoom: string
   deviceToken: string
 }
 
@@ -39,14 +38,6 @@ export const DeviceModel = sequelize.define<DeviceInstance>(
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    deviceType: {
-      type: DataTypes.STRING(80),
-      allowNull: false
-    },
-    deviceCategory: {
-      type: DataTypes.STRING(80),
-      allowNull: false
-    },
     deviceBuilding: {
       type: DataTypes.STRING(100),
       allowNull: false
@@ -55,15 +46,10 @@ export const DeviceModel = sequelize.define<DeviceInstance>(
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    deviceStatus: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true ,
-      defaultValue: 0
-    },
     deviceToken: {
       type: DataTypes.STRING(250),
       allowNull: false
-    },
+    }
   },
   {
     ...sequelize,
@@ -87,3 +73,15 @@ export const DeviceModel = sequelize.define<DeviceInstance>(
     }
   }
 )
+
+DeviceModel.hasMany(DeviceLogModel, {
+  as: 'deviceLogs',
+  sourceKey: 'deviceId',
+  foreignKey: 'deviceLogDeviceId'
+})
+
+DeviceModel.hasMany(DeviceSensorsModel, {
+  as: 'deviceSensors',
+  sourceKey: 'deviceId',
+  foreignKey: 'deviceSensorDeviceId'
+})

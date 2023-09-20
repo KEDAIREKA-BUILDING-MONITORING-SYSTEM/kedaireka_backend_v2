@@ -7,44 +7,31 @@ const { ZygoteModel } = require('../zygote')
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('device', {
+    await queryInterface.createTable('device_log', {
       ...ZygoteModel,
-      device_id: {
+      device_log_id: {
         type: Sequelize.STRING(100),
         allowNull: false
       },
-      device_name: {
+      device_log_device_id: {
         type: Sequelize.STRING(100),
         allowNull: false
       },
-      device_type: {
-        type: Sequelize.STRING(100),
+      device_log_value: {
+        type: Sequelize.JSON,
         allowNull: false
       },
-      device_category: {
-        type: Sequelize.STRING(100),
-        allowNull: false
-      },
-      device_building: {
+      device_log_sensor_name: {
         type: Sequelize.STRING(80),
         allowNull: false
       },
-      device_room: {
-        type: Sequelize.STRING(50),
-        allowNull: false
-      },
-      device_status: {
-        type: Sequelize.BOOLEAN,
-        allowNull: true,
-        defaultValue: 0
-      },
-      device_token: {
-        type: Sequelize.STRING(250),
+      device_log_sensor_category: {
+        type: Sequelize.STRING(80),
         allowNull: false
       }
     })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('device')
+    await queryInterface.dropTable('device_log')
   }
 }
