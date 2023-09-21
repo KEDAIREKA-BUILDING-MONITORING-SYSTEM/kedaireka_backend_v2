@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
 import { Op } from 'sequelize'
 import { requestChecker } from '../../utilities/requestCheker'
-import { DeviceModel, type DeviceAttributes } from '../../models/device'
+import { DeviceModel, type DeviceAttributes } from '../../models/devices'
 
 export const removeDevice = async (req: any, res: Response): Promise<any> => {
   const requestQuery = req.query as DeviceAttributes

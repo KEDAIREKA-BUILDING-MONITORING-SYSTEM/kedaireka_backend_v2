@@ -1,16 +1,22 @@
 import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
+import { DeviceModel } from '../../models/devices'
+import { v4 as uuidv4 } from 'uuid'
+import { DeviceLogModel, type DeviceLogAttributes } from '../../models/deviceLogs'
 import { Op } from 'sequelize'
 import { requestChecker } from '../../utilities/requestCheker'
-import { type CrudExampleAttributes, CrudExampleModel } from '../../models/crudExample'
 
-export const removeCrudExample = async (req: any, res: Response): Promise<any> => {
-  const requestQuery = req.query as CrudExampleAttributes
-
+export const createDeviceLog = async (req: any, res: Response): Promise<any> => {
+  const requestBody = req.body as DeviceLogAttributes
   const emptyField = requestChecker({
-    requireList: ['crudExampleId'],
-    requestData: requestQuery
+    requireList: [
+      'deviceLogValue',
+      'deviceLogSensorName',
+      'deviceLogSensorCategory',
+      'x-device-token'
+    ],
+    requestData: { ...requestBody, ...req.headers }
   })
 
   if (emptyField.length > 0) {
@@ -20,25 +26,27 @@ export const removeCrudExample = async (req: any, res: Response): Promise<any> =
   }
 
   try {
-    const result = await CrudExampleModel.findOne({
+    const device = await DeviceModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        crudExampleId: { [Op.eq]: requestQuery.crudExampleId }
+        deviceToken: { [Op.eq]: req.header('x-device-token') }
       }
     })
 
-    if (result == null) {
-      const message = 'not found!'
+    if (device == null) {
+      const message = 'device not found!'
       const response = ResponseData.error(message)
       return res.status(StatusCodes.NOT_FOUND).json(response)
     }
 
-    result.deleted = 1
-    void result.save()
+    requestBody.deviceLogDeviceId = device.deviceId
+    requestBody.deviceLogId = uuidv4()
+    await DeviceLogModel.create(requestBody)
 
     const response = ResponseData.default
-    response.data = { message: 'success' }
-    return res.status(StatusCodes.OK).json(response)
+    const result = { message: 'success' }
+    response.data = result
+    return res.status(StatusCodes.CREATED).json(response)
   } catch (error: any) {
     const message = `unable to process request! error ${error.message}`
     const response = ResponseData.error(message)
