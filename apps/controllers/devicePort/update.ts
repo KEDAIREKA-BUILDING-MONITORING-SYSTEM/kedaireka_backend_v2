@@ -1,22 +1,19 @@
 import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
-import { DeviceModel } from '../../models/devices'
-import { v4 as uuidv4 } from 'uuid'
-import { DeviceLogModel, type DeviceLogAttributes } from '../../models/deviceLogs'
-import { Op } from 'sequelize'
 import { requestChecker } from '../../utilities/requestCheker'
+import {
+  DeviceSensorsModel,
+  type DeviceSensorsAttributes
+} from '../../models/deviceSensors'
+import { Op } from 'sequelize'
 
-export const createDeviceLog = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as DeviceLogAttributes
+export const updateDevicePort = async (req: any, res: Response): Promise<any> => {
+  const requestBody = req.body as DeviceSensorsAttributes
+
   const emptyField = requestChecker({
-    requireList: [
-      'deviceLogValue',
-      'deviceLogSensorName',
-      'deviceLogSensorCategory',
-      'x-device-token'
-    ],
-    requestData: { ...requestBody, ...req.headers }
+    requireList: ['deviceSensorDeviceId', 'deviceSensorPort'],
+    requestData: requestBody
   })
 
   if (emptyField.length > 0) {
@@ -26,22 +23,22 @@ export const createDeviceLog = async (req: any, res: Response): Promise<any> => 
   }
 
   try {
-    const device = await DeviceModel.findOne({
+    const deviceSensor = await DeviceSensorsModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        deviceToken: { [Op.eq]: req.header('x-device-token') }
+        deviceSensorDeviceId: { [Op.eq]: requestBody.deviceSensorDeviceId },
+        deviceSensorPort: { [Op.eq]: requestBody.deviceSensorPort }
       }
     })
 
-    if (device === null) {
-      const message = 'device not found!'
+    if (deviceSensor === null) {
+      const message = 'device port not found!'
       const response = ResponseData.error(message)
-      return res.status(StatusCodes.NOT_FOUND).json(response)
+      return res.status(StatusCodes.BAD_REQUEST).json(response)
     }
 
-    requestBody.deviceLogDeviceId = device.deviceId
-    requestBody.deviceLogId = uuidv4()
-    await DeviceLogModel.create(requestBody)
+    deviceSensor.deviceSensorStatus = requestBody.deviceSensorStatus
+    await deviceSensor.save()
 
     const response = ResponseData.default
     const result = { message: 'success' }

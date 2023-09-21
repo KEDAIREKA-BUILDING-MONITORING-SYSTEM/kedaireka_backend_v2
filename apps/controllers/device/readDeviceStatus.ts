@@ -1,22 +1,15 @@
 import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
-import { DeviceModel } from '../../models/devices'
-import { v4 as uuidv4 } from 'uuid'
-import { DeviceLogModel, type DeviceLogAttributes } from '../../models/deviceLogs'
 import { Op } from 'sequelize'
 import { requestChecker } from '../../utilities/requestCheker'
+import { DeviceModel } from '../../models/devices'
+import { DeviceSensorsModel } from '../../models/deviceSensors'
 
-export const createDeviceLog = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as DeviceLogAttributes
+export const readDeviceStatus = async (req: any, res: Response): Promise<any> => {
   const emptyField = requestChecker({
-    requireList: [
-      'deviceLogValue',
-      'deviceLogSensorName',
-      'deviceLogSensorCategory',
-      'x-device-token'
-    ],
-    requestData: { ...requestBody, ...req.headers }
+    requireList: ['x-device-token'],
+    requestData: req.headers
   })
 
   if (emptyField.length > 0) {
@@ -39,14 +32,23 @@ export const createDeviceLog = async (req: any, res: Response): Promise<any> => 
       return res.status(StatusCodes.NOT_FOUND).json(response)
     }
 
-    requestBody.deviceLogDeviceId = device.deviceId
-    requestBody.deviceLogId = uuidv4()
-    await DeviceLogModel.create(requestBody)
+    const devicePorts = await DeviceSensorsModel.findAll({
+      where: {
+        deleted: { [Op.eq]: 0 },
+        deviceSensorDeviceId: { [Op.eq]: device?.deviceId }
+      },
+      attributes: ['deviceSensorPort', 'deviceSensorStatus']
+    })
+
+    if (devicePorts === null) {
+      const message = 'device port not found!'
+      const response = ResponseData.error(message)
+      return res.status(StatusCodes.NOT_FOUND).json(response)
+    }
 
     const response = ResponseData.default
-    const result = { message: 'success' }
-    response.data = result
-    return res.status(StatusCodes.CREATED).json(response)
+    response.data = devicePorts
+    return res.status(StatusCodes.OK).json(response)
   } catch (error: any) {
     const message = `unable to process request! error ${error.message}`
     const response = ResponseData.error(message)

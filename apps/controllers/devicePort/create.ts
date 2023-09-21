@@ -7,6 +7,7 @@ import {
   DeviceSensorsModel,
   type DeviceSensorsAttributes
 } from '../../models/deviceSensors'
+import { Op } from 'sequelize'
 
 export const createDeviceSensor = async (req: any, res: Response): Promise<any> => {
   const requestBody = req.body as DeviceSensorsAttributes
@@ -29,6 +30,21 @@ export const createDeviceSensor = async (req: any, res: Response): Promise<any> 
   }
 
   try {
+    const device = await DeviceSensorsModel.findOne({
+      where: {
+        deleted: { [Op.eq]: 0 },
+        deviceSensorDeviceId: { [Op.eq]: requestBody.deviceSensorDeviceId },
+        deviceSensorPort: { [Op.eq]: requestBody.deviceSensorPort }
+      },
+      attributes: ['deviceSensorPort', 'deviceSensorStatus']
+    })
+
+    if (device !== null) {
+      const message = 'device port already used!'
+      const response = ResponseData.error(message)
+      return res.status(StatusCodes.BAD_REQUEST).json(response)
+    }
+
     requestBody.deviceSensorId = uuidv4()
     await DeviceSensorsModel.create(requestBody)
     const response = ResponseData.default

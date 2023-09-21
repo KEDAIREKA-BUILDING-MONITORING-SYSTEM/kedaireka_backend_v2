@@ -1,17 +1,17 @@
 import { createDevice } from './createDevice'
-import { createDeviceSensor } from './createSensor'
+import { createDeviceSensor } from '../devicePort/create'
 import { findAllAllDevice, findOneDevice } from './find'
+import { readDeviceStatus } from './readDeviceStatus'
 import { removeDevice } from './remove'
 import { updateDevice, updateDeviceToken } from './update'
-// import { statisticDevice } from './statistic'
 
 export const deviceController = {
   createDevice,
   findAll: findAllAllDevice,
   findOne: findOneDevice,
-  // statistic: statisticDevice,
   remove: removeDevice,
   update: updateDevice,
   createSensor: createDeviceSensor,
-  updateToken: updateDeviceToken
+  updateToken: updateDeviceToken,
+  deviceStatus: readDeviceStatus
 }

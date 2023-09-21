@@ -3,6 +3,7 @@
 import express, { type Express, type Request, type Response } from 'express'
 import { deviceController } from '../../controllers/device'
 import { deviceLogController } from '../../controllers/deviceLog'
+import { devicePortController } from '../../controllers/devicePort'
 
 export const deviceRouter = (app: Express) => {
   const route = express.Router()
@@ -28,6 +29,12 @@ export const deviceRouter = (app: Express) => {
     '/sensors',
     async (req: Request, res: Response) => await deviceController.createSensor(req, res)
   )
+
+  route.patch(
+    '/sensors',
+    async (req: Request, res: Response) => await devicePortController.update(req, res)
+  )
+
   route.patch(
     '/',
     async (req: Request, res: Response) => await deviceController.update(req, res)
@@ -49,5 +56,10 @@ export const deviceRouter = (app: Express) => {
   route.post(
     '/logs',
     async (req: Request, res: Response) => await deviceLogController.create(req, res)
+  )
+
+  route.get(
+    '/status',
+    async (req: Request, res: Response) => await deviceController.deviceStatus(req, res)
   )
 }
