@@ -1,26 +1,26 @@
 import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
-import { requestChecker } from '../../utilities/requestCheker'
+import { DeviceModel } from '../../models/devices'
 import { v4 as uuidv4 } from 'uuid'
 import {
-  DeviceSensorsModel,
-  type DeviceSensorsAttributes
-} from '../../models/deviceSensors'
+  DevicePortLogsModel,
+  type DevicePortLogsAttributes
+} from '../../models/devicePortLogs'
 import { Op } from 'sequelize'
+import { requestChecker } from '../../utilities/requestCheker'
 
-export const createDeviceSensor = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as DeviceSensorsAttributes
-
+export const createDevicePortLog = async (req: any, res: Response): Promise<any> => {
+  const requestBody = req.body as DevicePortLogsAttributes
   const emptyField = requestChecker({
     requireList: [
-      'deviceSensorDeviceId',
-      'deviceSensorName',
-      'deviceSensorCategory',
-      'deviceSensorPort',
-      'deviceSensorStatus'
+      'devicePortLogValue',
+      'devicePortLogName',
+      'devicePortLogCategory',
+      'devicePortLogNumber',
+      'x-device-token'
     ],
-    requestData: requestBody
+    requestData: { ...requestBody, ...req.headers }
   })
 
   if (emptyField.length > 0) {
@@ -30,23 +30,23 @@ export const createDeviceSensor = async (req: any, res: Response): Promise<any> 
   }
 
   try {
-    const device = await DeviceSensorsModel.findOne({
+    const device = await DeviceModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        deviceSensorDeviceId: { [Op.eq]: requestBody.deviceSensorDeviceId },
-        deviceSensorPort: { [Op.eq]: requestBody.deviceSensorPort }
-      },
-      attributes: ['deviceSensorPort', 'deviceSensorStatus']
+        deviceToken: { [Op.eq]: req.header('x-device-token') }
+      }
     })
 
-    if (device !== null) {
-      const message = 'device port already used!'
+    if (device === null) {
+      const message = 'device not found!'
       const response = ResponseData.error(message)
-      return res.status(StatusCodes.BAD_REQUEST).json(response)
+      return res.status(StatusCodes.NOT_FOUND).json(response)
     }
 
-    requestBody.deviceSensorId = uuidv4()
-    await DeviceSensorsModel.create(requestBody)
+    requestBody.devicePortLogDeviceId = device.deviceId
+    requestBody.devicePortLogId = uuidv4()
+    await DevicePortLogsModel.create(requestBody)
+
     const response = ResponseData.default
     const result = { message: 'success' }
     response.data = result

@@ -2,17 +2,14 @@ import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
 import { requestChecker } from '../../utilities/requestCheker'
-import {
-  DeviceSensorsModel,
-  type DeviceSensorsAttributes
-} from '../../models/deviceSensors'
+import { DevicePortsModel, type DevicePortsAttributes } from '../../models/devicePorts'
 import { Op } from 'sequelize'
 
 export const updateDevicePort = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as DeviceSensorsAttributes
+  const requestBody = req.body as DevicePortsAttributes
 
   const emptyField = requestChecker({
-    requireList: ['deviceSensorDeviceId', 'deviceSensorPort'],
+    requireList: ['devicePortDeviceId', 'devicePortNumber'],
     requestData: requestBody
   })
 
@@ -23,11 +20,11 @@ export const updateDevicePort = async (req: any, res: Response): Promise<any> =>
   }
 
   try {
-    const deviceSensor = await DeviceSensorsModel.findOne({
+    const deviceSensor = await DevicePortsModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        deviceSensorDeviceId: { [Op.eq]: requestBody.deviceSensorDeviceId },
-        deviceSensorPort: { [Op.eq]: requestBody.deviceSensorPort }
+        devicePortDeviceId: { [Op.eq]: requestBody.devicePortDeviceId },
+        devicePortNumber: { [Op.eq]: requestBody.devicePortNumber }
       }
     })
 
@@ -37,7 +34,7 @@ export const updateDevicePort = async (req: any, res: Response): Promise<any> =>
       return res.status(StatusCodes.BAD_REQUEST).json(response)
     }
 
-    deviceSensor.deviceSensorStatus = requestBody.deviceSensorStatus
+    deviceSensor.devicePortStatus = requestBody.devicePortStatus
     await deviceSensor.save()
 
     const response = ResponseData.default

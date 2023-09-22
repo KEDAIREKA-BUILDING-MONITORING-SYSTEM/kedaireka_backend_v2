@@ -4,47 +4,52 @@ import { DataTypes, type Model, type Optional } from 'sequelize'
 import { sequelize } from '.'
 import { type ZygoteAttributes, ZygoteModel } from './zygote'
 
-export interface DeviceLogAttributes extends ZygoteAttributes {
-  deviceLogId: string
-  deviceLogDeviceId: string
-  deviceLogValue: string
-  deviceLogSensorName: string
-  deviceLogSensorCategory: string
+export interface DevicePortLogsAttributes extends ZygoteAttributes {
+  devicePortLogId: string
+  devicePortLogDeviceId: string
+  devicePortLogValue: string
+  devicePortLogName: string
+  devicePortLogNumber: number
+  devicePortLogCategory: string
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
-type DeviceLogCreationAttributes = Optional<
-  DeviceLogAttributes,
+type DevicePortLogsCreationAttributes = Optional<
+  DevicePortLogsAttributes,
   'id' | 'createdAt' | 'updatedAt'
 >
 
 // We need to declare an interface for our model that is basically what our class would be
-interface DeviceLogInstance
-  extends Model<DeviceLogAttributes, DeviceLogCreationAttributes>,
-    DeviceLogAttributes {}
+interface DevicePortLogsInstance
+  extends Model<DevicePortLogsAttributes, DevicePortLogsCreationAttributes>,
+    DevicePortLogsAttributes {}
 
-export const DeviceLogModel = sequelize.define<DeviceLogInstance>(
-  'device_log',
+export const DevicePortLogsModel = sequelize.define<DevicePortLogsInstance>(
+  'device_port_logs',
   {
     ...ZygoteModel,
-    deviceLogId: {
+    devicePortLogId: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    deviceLogDeviceId: {
+    devicePortLogDeviceId: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    deviceLogValue: {
+    devicePortLogValue: {
       type: DataTypes.JSON,
       allowNull: false
     },
-    deviceLogSensorName: {
+    devicePortLogName: {
       type: DataTypes.STRING(80),
       allowNull: false
     },
-    deviceLogSensorCategory: {
+    devicePortLogNumber: {
+      type: DataTypes.NUMBER,
+      allowNull: false
+    },
+    devicePortLogCategory: {
       type: DataTypes.STRING(80),
       allowNull: false
     }
@@ -52,7 +57,7 @@ export const DeviceLogModel = sequelize.define<DeviceLogInstance>(
   {
     ...sequelize,
     timestamps: false,
-    tableName: 'device_log',
+    tableName: 'device_port_logs',
     deletedAt: false,
     paranoid: true,
     underscored: true,

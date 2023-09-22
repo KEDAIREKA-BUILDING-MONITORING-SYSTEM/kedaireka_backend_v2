@@ -5,32 +5,22 @@ import { Op } from 'sequelize'
 import { Pagination } from '../../utilities/pagination'
 import { requestChecker } from '../../utilities/requestCheker'
 import { CONSOLE } from '../../utilities/log'
+import { DevicePortLogsModel } from '../../models/devicePortLogs'
 import { type DeviceAttributes, DeviceModel } from '../../models/devices'
-import { DeviceLogModel } from '../../models/deviceLogs'
-import { DeviceSensorsModel } from '../../models/deviceSensors'
 
-export const findAllAllDevice = async (req: any, res: Response): Promise<any> => {
+export const findAllAllDevicePortLogs = async (req: any, res: Response): Promise<any> => {
   try {
     const page = new Pagination(
       parseInt(req.query.page) ?? 0,
       parseInt(req.query.size) ?? 10
     )
-    const result = await DeviceModel.findAndCountAll({
+    const result = await DevicePortLogsModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
         ...(Boolean(req.query.search) && {
           [Op.or]: [{ deviceName: { [Op.like]: `%${req.query.search}%` } }]
         })
       },
-      attributes: [
-        'createdAt',
-        'updatedAt',
-        'deviceId',
-        'deviceName',
-        'deviceBuilding',
-        'deviceRoom',
-        'deviceToken'
-      ],
       order: [['id', 'desc']],
       ...(req.query.pagination === 'true' && {
         limit: page.limit,
@@ -49,7 +39,7 @@ export const findAllAllDevice = async (req: any, res: Response): Promise<any> =>
   }
 }
 
-export const findOneDevice = async (req: any, res: Response): Promise<any> => {
+export const findOneDevicePortLogs = async (req: any, res: Response): Promise<any> => {
   const requestParams = req.params as DeviceAttributes
 
   const emptyField = requestChecker({
@@ -71,28 +61,15 @@ export const findOneDevice = async (req: any, res: Response): Promise<any> => {
       },
       include: [
         {
-          model: DeviceLogModel,
+          model: DevicePortLogsModel,
           attributes: ['createdAt', 'deviceLogId', 'deviceLogDeviceId', 'deviceLogValue'],
           as: 'deviceLogs'
-        },
-        {
-          model: DeviceSensorsModel,
-          attributes: [
-            'createdAt',
-            'deviceSensorId',
-            'deviceSensorDeviceId',
-            'deviceSensorName',
-            'deviceSensorCategory',
-            'deviceSensorPort',
-            'deviceSensorStatus'
-          ],
-          as: 'deviceSensors'
         }
       ]
     })
 
     if (result == null) {
-      const message = 'device not found!'
+      const message = 'not found!'
       const response = ResponseData.error(message)
       return res.status(StatusCodes.NOT_FOUND).json(response)
     }

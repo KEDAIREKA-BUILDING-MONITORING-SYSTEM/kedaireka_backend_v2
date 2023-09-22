@@ -1,18 +1,21 @@
 import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { Op } from 'sequelize'
 import { ResponseData } from '../../utilities/response'
-import { type UserAttributes, UserModel } from '../../models/user'
 import { requestChecker } from '../../utilities/requestCheker'
-import { hashPassword } from '../../utilities/scure_password'
 import { v4 as uuidv4 } from 'uuid'
-import { generateAccessToken } from '../../utilities/jwt'
+import { DevicePortsModel, type DevicePortsAttributes } from '../../models/devicePorts'
+import { Op } from 'sequelize'
 
-export const register = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as UserAttributes
+export const createDevicePort = async (req: any, res: Response): Promise<any> => {
+  const requestBody = req.body as DevicePortsAttributes
 
   const emptyField = requestChecker({
-    requireList: ['userName', 'userEmail', 'userPassword', 'userRole'],
+    requireList: [
+      'devicePortsDeviceId',
+      'devicePortCategory',
+      'devicePortNumber',
+      'devicePortStatus'
+    ],
     requestData: requestBody
   })
 
@@ -23,31 +26,26 @@ export const register = async (req: any, res: Response): Promise<any> => {
   }
 
   try {
-    const user = await UserModel.findOne({
-      raw: true,
+    const device = await DevicePortsModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        userEmail: { [Op.eq]: requestBody.userEmail }
-      }
+        devicePortDeviceId: { [Op.eq]: requestBody.devicePortDeviceId },
+        devicePortNumber: { [Op.eq]: requestBody.devicePortNumber }
+      },
+      attributes: ['devicePortNumber', 'deviceSensorStatus']
     })
 
-    if (user != null) {
-      const message = `Email ${user.userEmail} sudah terdaftar. Silahkan gunakan email lain.`
+    if (device !== null) {
+      const message = 'device port already used!'
       const response = ResponseData.error(message)
       return res.status(StatusCodes.BAD_REQUEST).json(response)
     }
 
-    requestBody.userPassword = hashPassword(requestBody.userPassword)
-    requestBody.userId = uuidv4()
-    await UserModel.create(requestBody)
-
-    const token = generateAccessToken({
-      userId: requestBody.userId,
-      role: 'superAdmin'
-    })
-
+    requestBody.devicePortId = uuidv4()
+    await DevicePortsModel.create(requestBody)
     const response = ResponseData.default
-    response.data = { token }
+    const result = { message: 'success' }
+    response.data = result
     return res.status(StatusCodes.CREATED).json(response)
   } catch (error: any) {
     const message = `unable to process request! error ${error.message}`

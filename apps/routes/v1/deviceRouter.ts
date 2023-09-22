@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import express, { type Express, type Request, type Response } from 'express'
-import { deviceController } from '../../controllers/device'
-import { deviceLogController } from '../../controllers/deviceLog'
-import { devicePortController } from '../../controllers/devicePort'
+import { deviceController } from '../../controllers/devices'
 
 export const deviceRouter = (app: Express) => {
   const route = express.Router()
@@ -13,28 +11,14 @@ export const deviceRouter = (app: Express) => {
     '/list',
     async (req: Request, res: Response) => await deviceController.findAll(req, res)
   )
-  // route.get(
-  //   '/statistic',
-  //   async (req: Request, res: Response) => await deviceController.statistic(req, res)
-  // )
   route.get(
     '/detail/:deviceId',
     async (req: Request, res: Response) => await deviceController.findOne(req, res)
   )
   route.post(
     '/',
-    async (req: Request, res: Response) => await deviceController.createDevice(req, res)
+    async (req: Request, res: Response) => await deviceController.create(req, res)
   )
-  route.post(
-    '/sensors',
-    async (req: Request, res: Response) => await deviceController.createSensor(req, res)
-  )
-
-  route.patch(
-    '/sensors',
-    async (req: Request, res: Response) => await devicePortController.update(req, res)
-  )
-
   route.patch(
     '/',
     async (req: Request, res: Response) => await deviceController.update(req, res)
@@ -46,20 +30,5 @@ export const deviceRouter = (app: Express) => {
   route.delete(
     '/',
     async (req: Request, res: Response) => await deviceController.remove(req, res)
-  )
-
-  route.get(
-    '/logs/:deviceId',
-    async (req: Request, res: Response) => await deviceLogController.find(req, res)
-  )
-
-  route.post(
-    '/logs',
-    async (req: Request, res: Response) => await deviceLogController.create(req, res)
-  )
-
-  route.get(
-    '/status',
-    async (req: Request, res: Response) => await deviceController.deviceStatus(req, res)
   )
 }

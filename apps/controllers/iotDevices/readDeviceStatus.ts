@@ -4,9 +4,9 @@ import { ResponseData } from '../../utilities/response'
 import { Op } from 'sequelize'
 import { requestChecker } from '../../utilities/requestCheker'
 import { DeviceModel } from '../../models/devices'
-import { DeviceSensorsModel } from '../../models/deviceSensors'
+import { DevicePortsModel } from '../../models/devicePorts'
 
-export const readDeviceStatus = async (req: any, res: Response): Promise<any> => {
+export const iotDeviceReadStatus = async (req: any, res: Response): Promise<any> => {
   const emptyField = requestChecker({
     requireList: ['x-device-token'],
     requestData: req.headers
@@ -32,10 +32,10 @@ export const readDeviceStatus = async (req: any, res: Response): Promise<any> =>
       return res.status(StatusCodes.NOT_FOUND).json(response)
     }
 
-    const devicePorts = await DeviceSensorsModel.findAll({
+    const devicePorts = await DevicePortsModel.findAll({
       where: {
         deleted: { [Op.eq]: 0 },
-        deviceSensorDeviceId: { [Op.eq]: device?.deviceId }
+        devicePortDeviceId: { [Op.eq]: device?.deviceId }
       },
       attributes: ['deviceSensorPort', 'deviceSensorStatus']
     })

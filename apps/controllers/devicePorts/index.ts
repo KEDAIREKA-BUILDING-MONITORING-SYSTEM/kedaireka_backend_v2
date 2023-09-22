@@ -1,7 +1,7 @@
-import { createDeviceSensor } from './create'
+import { createDevicePort } from './create'
 import { updateDevicePort } from './update'
 
 export const devicePortController = {
-  create: createDeviceSensor,
+  create: createDevicePort,
   update: updateDevicePort
 }
