@@ -37,7 +37,7 @@ export const iotDeviceReadStatus = async (req: any, res: Response): Promise<any>
         deleted: { [Op.eq]: 0 },
         devicePortDeviceId: { [Op.eq]: device?.deviceId }
       },
-      attributes: ['deviceSensorPort', 'deviceSensorStatus']
+      attributes: ['devicePortNumber', 'devicePortStatus']
     })
 
     if (devicePorts === null) {
