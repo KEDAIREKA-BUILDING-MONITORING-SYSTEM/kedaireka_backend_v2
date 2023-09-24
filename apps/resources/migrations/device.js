@@ -25,11 +25,11 @@ module.exports = {
         type: Sequelize.STRING(100),
         allowNull: false
       },
-      device_building: {
+      device_building_id: {
         type: Sequelize.STRING(80),
         allowNull: false
       },
-      device_room: {
+      device_room_id: {
         type: Sequelize.STRING(50),
         allowNull: false
       },

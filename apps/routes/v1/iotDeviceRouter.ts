@@ -10,4 +10,8 @@ export const iotDeviceRouter = (app: Express) => {
     '/iot/status',
     async (req: Request, res: Response) => await iotDeviceController.readStatus(req, res)
   )
+  route.post(
+    '/iot/port/logs',
+    async (req: Request, res: Response) => await iotDeviceController.createLog(req, res)
+  )
 }

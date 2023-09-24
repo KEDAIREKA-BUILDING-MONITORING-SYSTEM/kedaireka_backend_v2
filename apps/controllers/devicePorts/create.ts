@@ -11,7 +11,8 @@ export const createDevicePort = async (req: any, res: Response): Promise<any> =>
 
   const emptyField = requestChecker({
     requireList: [
-      'devicePortsDeviceId',
+      'devicePortDeviceId',
+      'devicePortName',
       'devicePortCategory',
       'devicePortNumber',
       'devicePortStatus'
@@ -32,7 +33,7 @@ export const createDevicePort = async (req: any, res: Response): Promise<any> =>
         devicePortDeviceId: { [Op.eq]: requestBody.devicePortDeviceId },
         devicePortNumber: { [Op.eq]: requestBody.devicePortNumber }
       },
-      attributes: ['devicePortNumber', 'deviceSensorStatus']
+      attributes: ['devicePortNumber', 'devicePortStatus']
     })
 
     if (device !== null) {

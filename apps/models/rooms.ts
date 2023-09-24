@@ -4,60 +4,42 @@ import { DataTypes, type Model, type Optional } from 'sequelize'
 import { sequelize } from '.'
 import { type ZygoteAttributes, ZygoteModel } from './zygote'
 
-export interface DevicePortLogsAttributes extends ZygoteAttributes {
-  devicePortLogId: string
-  devicePortLogDeviceId: string
-  devicePortLogValue: string
-  devicePortLogName: string
-  devicePortLogPortNumber: number
-  devicePortLogCategory: string
+export interface RoomsAttributes extends ZygoteAttributes {
+  roomId: string
+  roomName: string
+  roomBuildingId: string
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
-type DevicePortLogsCreationAttributes = Optional<
-  DevicePortLogsAttributes,
-  'id' | 'createdAt' | 'updatedAt'
->
+type RoomsCreationAttributes = Optional<RoomsAttributes, 'id' | 'createdAt' | 'updatedAt'>
 
 // We need to declare an interface for our model that is basically what our class would be
-interface DevicePortLogsInstance
-  extends Model<DevicePortLogsAttributes, DevicePortLogsCreationAttributes>,
-    DevicePortLogsAttributes {}
+interface RoomsInstance
+  extends Model<RoomsAttributes, RoomsCreationAttributes>,
+    RoomsAttributes {}
 
-export const DevicePortLogsModel = sequelize.define<DevicePortLogsInstance>(
-  'device_port_logs',
+export const RoomsModel = sequelize.define<RoomsInstance>(
+  'rooms',
   {
     ...ZygoteModel,
-    devicePortLogId: {
+    roomId: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    devicePortLogDeviceId: {
+    roomName: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    devicePortLogValue: {
-      type: DataTypes.JSON,
-      allowNull: false
-    },
-    devicePortLogName: {
-      type: DataTypes.STRING(80),
-      allowNull: false
-    },
-    devicePortLogPortNumber: {
-      type: DataTypes.NUMBER,
-      allowNull: false
-    },
-    devicePortLogCategory: {
-      type: DataTypes.STRING(80),
+    roomBuildingId: {
+      type: DataTypes.STRING(100),
       allowNull: false
     }
   },
   {
     ...sequelize,
     timestamps: false,
-    tableName: 'device_port_logs',
+    tableName: 'rooms',
     deletedAt: false,
     paranoid: true,
     underscored: true,

@@ -17,7 +17,7 @@ export const createDevicePortLog = async (req: any, res: Response): Promise<any>
       'devicePortLogValue',
       'devicePortLogName',
       'devicePortLogCategory',
-      'devicePortLogNumber',
+      'devicePortLogPortNumber',
       'x-device-token'
     ],
     requestData: { ...requestBody, ...req.headers }

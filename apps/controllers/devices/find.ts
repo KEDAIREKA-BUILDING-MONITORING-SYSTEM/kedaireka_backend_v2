@@ -8,6 +8,8 @@ import { CONSOLE } from '../../utilities/log'
 import { type DeviceAttributes, DeviceModel } from '../../models/devices'
 import { DevicePortLogsModel } from '../../models/devicePortLogs'
 import { DevicePortsModel } from '../../models/devicePorts'
+import { BuildingsModel } from '../../models/buildings'
+import { RoomsModel } from '../../models/rooms'
 
 export const findAllAllDevice = async (req: any, res: Response): Promise<any> => {
   try {
@@ -76,7 +78,8 @@ export const findOneDevice = async (req: any, res: Response): Promise<any> => {
             'createdAt',
             'devicePortLogId',
             'devicePortLogDeviceId',
-            'devicePortLogValue'
+            'devicePortLogValue',
+            'devicePortLogPortNumber'
           ],
           as: 'devicePortLogs'
         },
@@ -92,6 +95,16 @@ export const findOneDevice = async (req: any, res: Response): Promise<any> => {
             'devicePortStatus'
           ],
           as: 'devicePorts'
+        },
+        {
+          model: BuildingsModel,
+          as: 'building',
+          attributes: ['buildingId', 'buildingName']
+        },
+        {
+          model: RoomsModel,
+          as: 'room',
+          attributes: ['roomId', 'roomName']
         }
       ]
     })

@@ -4,60 +4,40 @@ import { DataTypes, type Model, type Optional } from 'sequelize'
 import { sequelize } from '.'
 import { type ZygoteAttributes, ZygoteModel } from './zygote'
 
-export interface DevicePortLogsAttributes extends ZygoteAttributes {
-  devicePortLogId: string
-  devicePortLogDeviceId: string
-  devicePortLogValue: string
-  devicePortLogName: string
-  devicePortLogPortNumber: number
-  devicePortLogCategory: string
+export interface BuildingsAttributes extends ZygoteAttributes {
+  buildingId: string
+  buildingName: string
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
-type DevicePortLogsCreationAttributes = Optional<
-  DevicePortLogsAttributes,
+type BuildingsCreationAttributes = Optional<
+  BuildingsAttributes,
   'id' | 'createdAt' | 'updatedAt'
 >
 
 // We need to declare an interface for our model that is basically what our class would be
-interface DevicePortLogsInstance
-  extends Model<DevicePortLogsAttributes, DevicePortLogsCreationAttributes>,
-    DevicePortLogsAttributes {}
+interface BuildingsInstance
+  extends Model<BuildingsAttributes, BuildingsCreationAttributes>,
+    BuildingsAttributes {}
 
-export const DevicePortLogsModel = sequelize.define<DevicePortLogsInstance>(
-  'device_port_logs',
+export const BuildingsModel = sequelize.define<BuildingsInstance>(
+  'buildings',
   {
     ...ZygoteModel,
-    devicePortLogId: {
+    buildingId: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    devicePortLogDeviceId: {
+    buildingName: {
       type: DataTypes.STRING(100),
-      allowNull: false
-    },
-    devicePortLogValue: {
-      type: DataTypes.JSON,
-      allowNull: false
-    },
-    devicePortLogName: {
-      type: DataTypes.STRING(80),
-      allowNull: false
-    },
-    devicePortLogPortNumber: {
-      type: DataTypes.NUMBER,
-      allowNull: false
-    },
-    devicePortLogCategory: {
-      type: DataTypes.STRING(80),
       allowNull: false
     }
   },
   {
     ...sequelize,
     timestamps: false,
-    tableName: 'device_port_logs',
+    tableName: 'buildings',
     deletedAt: false,
     paranoid: true,
     underscored: true,

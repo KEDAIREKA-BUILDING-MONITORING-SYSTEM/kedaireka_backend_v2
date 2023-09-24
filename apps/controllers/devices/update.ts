@@ -29,20 +29,20 @@ export const updateDevice = async (req: any, res: Response): Promise<any> => {
     })
 
     if (device == null) {
-      const message = 'not found!'
+      const message = 'device not found!'
       const response = ResponseData.error(message)
       return res.status(StatusCodes.NOT_FOUND).json(response)
     }
 
     const newData: DeviceAttributes | any = {
-      ...(requestBody.deviceName.length > 0 && {
+      ...(requestBody.deviceName?.length > 0 && {
         deviceName: requestBody.deviceName
       }),
-      ...(requestBody.deviceRoom.length > 0 && {
-        deviceRoom: requestBody.deviceRoom
+      ...(requestBody.deviceRoomId?.length > 0 && {
+        deviceRoomId: requestBody.deviceRoomId
       }),
-      ...(requestBody.deviceBuilding.length > 0 && {
-        deviceBuilding: requestBody.deviceBuilding
+      ...(requestBody.deviceBuildingId?.length > 0 && {
+        deviceBuildingId: requestBody.deviceBuildingId
       })
     }
 
@@ -94,7 +94,7 @@ export const updateDeviceToken = async (req: any, res: Response): Promise<any> =
     device.deviceToken = uuidv4()
     void device.save()
     const response = ResponseData.default
-    response.data = { message: 'success' }
+    response.data = { token: device.deviceToken }
     return res.status(StatusCodes.OK).json(response)
   } catch (error: any) {
     const message = `unable to process request! error ${error.message}`

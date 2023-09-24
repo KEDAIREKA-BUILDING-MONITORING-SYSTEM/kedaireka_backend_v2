@@ -5,12 +5,14 @@ import { sequelize } from '.'
 import { type ZygoteAttributes, ZygoteModel } from './zygote'
 import { DevicePortLogsModel } from './devicePortLogs'
 import { DevicePortsModel } from './devicePorts'
+import { BuildingsModel } from './buildings'
+import { RoomsModel } from './rooms'
 
 export interface DeviceAttributes extends ZygoteAttributes {
   deviceId: string
   deviceName: string
-  deviceBuilding: string
-  deviceRoom: string
+  deviceBuildingId: string
+  deviceRoomId: string
   deviceToken: string
 }
 
@@ -38,11 +40,11 @@ export const DeviceModel = sequelize.define<DeviceInstance>(
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    deviceBuilding: {
+    deviceBuildingId: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    deviceRoom: {
+    deviceRoomId: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
@@ -84,4 +86,16 @@ DeviceModel.hasMany(DevicePortsModel, {
   as: 'devicePorts',
   sourceKey: 'deviceId',
   foreignKey: 'devicePortDeviceId'
+})
+
+DeviceModel.hasOne(BuildingsModel, {
+  as: 'building',
+  sourceKey: 'deviceBuildingId',
+  foreignKey: 'buildingId'
+})
+
+DeviceModel.hasOne(RoomsModel, {
+  as: 'room',
+  sourceKey: 'deviceRoomId',
+  foreignKey: 'roomId'
 })

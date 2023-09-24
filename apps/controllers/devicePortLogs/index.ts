@@ -1,4 +1,4 @@
-import { createDevicePortLog } from './create'
+import { createDevicePortLog } from '../iotDevices/createLogs'
 import { findAllAllDevicePortLogs, findOneDevicePortLogs } from './find'
 
 export const devicePortLogsController = {
