@@ -1,29 +1,24 @@
 import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
-import { DeviceModel } from '../../models/devices'
-import { v4 as uuidv4 } from 'uuid'
-import {
-  DevicePortLogsModel,
-  type DevicePortLogsAttributes
-} from '../../models/devicePortLogs'
-import { Op } from 'sequelize'
 import { requestChecker } from '../../utilities/requestCheker'
+import { v4 as uuidv4 } from 'uuid'
+import { DevicePortsModel, type DevicePortsAttributes } from '../../models/devicePorts'
+import { Op } from 'sequelize'
 
-export const createDevicePortLog = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as DevicePortLogsAttributes
+export const createDevicePort = async (req: any, res: Response): Promise<any> => {
+  const requestBody = req.body as DevicePortsAttributes
+
   const emptyField = requestChecker({
     requireList: [
-      'devicePortLogValue',
-      'devicePortLogName',
-      'devicePortLogCategory',
-      'devicePortLogPortNumber',
-      'x-device-token'
+      'devicePortDeviceId',
+      'devicePortName',
+      'devicePortCategory',
+      'devicePortNumber',
+      'devicePortStatus'
     ],
-    requestData: { ...requestBody, ...req.headers }
+    requestData: requestBody
   })
-
-  console.log(requestBody)
 
   if (emptyField.length > 0) {
     const message = `invalid request parameter! require (${emptyField})`
@@ -32,23 +27,23 @@ export const createDevicePortLog = async (req: any, res: Response): Promise<any>
   }
 
   try {
-    const device = await DeviceModel.findOne({
+    const device = await DevicePortsModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        deviceToken: { [Op.eq]: req.header('x-device-token') }
-      }
+        devicePortDeviceId: { [Op.eq]: requestBody.devicePortDeviceId },
+        devicePortNumber: { [Op.eq]: requestBody.devicePortNumber }
+      },
+      attributes: ['devicePortNumber', 'devicePortStatus']
     })
 
-    if (device === null) {
-      const message = 'device not found!'
+    if (device !== null) {
+      const message = 'device port already used!'
       const response = ResponseData.error(message)
-      return res.status(StatusCodes.NOT_FOUND).json(response)
+      return res.status(StatusCodes.BAD_REQUEST).json(response)
     }
 
-    requestBody.devicePortLogDeviceId = device.deviceId
-    requestBody.devicePortLogId = uuidv4()
-    await DevicePortLogsModel.create(requestBody)
-
+    requestBody.devicePortId = uuidv4()
+    await DevicePortsModel.create(requestBody)
     const response = ResponseData.default
     const result = { message: 'success' }
     response.data = result

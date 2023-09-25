@@ -1,15 +1,15 @@
 import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
-import { DeviceModel, type DeviceAttributes } from '../../models/devices'
 import { requestChecker } from '../../utilities/requestCheker'
-import { v4 as uuidv4 } from 'uuid'
+import { DevicePortsModel, type DevicePortsAttributes } from '../../models/devicePorts'
+import { Op } from 'sequelize'
 
-export const createDevice = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as DeviceAttributes
+export const updateDevicePort = async (req: any, res: Response): Promise<any> => {
+  const requestBody = req.body as DevicePortsAttributes
 
   const emptyField = requestChecker({
-    requireList: ['deviceName', 'deviceBuildingId', 'deviceRoomId'],
+    requireList: ['devicePortDeviceId', 'devicePortNumber'],
     requestData: requestBody
   })
 
@@ -20,9 +20,22 @@ export const createDevice = async (req: any, res: Response): Promise<any> => {
   }
 
   try {
-    requestBody.deviceId = uuidv4()
-    requestBody.deviceToken = uuidv4()
-    await DeviceModel.create(requestBody)
+    const deviceSensor = await DevicePortsModel.findOne({
+      where: {
+        deleted: { [Op.eq]: 0 },
+        devicePortDeviceId: { [Op.eq]: requestBody.devicePortDeviceId },
+        devicePortNumber: { [Op.eq]: requestBody.devicePortNumber }
+      }
+    })
+
+    if (deviceSensor === null) {
+      const message = 'device port not found!'
+      const response = ResponseData.error(message)
+      return res.status(StatusCodes.BAD_REQUEST).json(response)
+    }
+
+    deviceSensor.devicePortStatus = requestBody.devicePortStatus
+    await deviceSensor.save()
 
     const response = ResponseData.default
     const result = { message: 'success' }

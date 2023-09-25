@@ -24,14 +24,18 @@ export const findAllAllDevice = async (req: any, res: Response): Promise<any> =>
           [Op.or]: [{ deviceName: { [Op.like]: `%${req.query.search}%` } }]
         })
       },
-      attributes: [
-        'createdAt',
-        'updatedAt',
-        'deviceId',
-        'deviceName',
-        'deviceBuilding',
-        'deviceRoom',
-        'deviceToken'
+      attributes: ['createdAt', 'updatedAt', 'deviceId', 'deviceName', 'deviceToken'],
+      include: [
+        {
+          model: BuildingsModel,
+          as: 'building',
+          attributes: ['buildingId', 'buildingName']
+        },
+        {
+          model: RoomsModel,
+          as: 'room',
+          attributes: ['roomId', 'roomName']
+        }
       ],
       order: [['id', 'desc']],
       ...(req.query.pagination === 'true' && {
@@ -79,6 +83,7 @@ export const findOneDevice = async (req: any, res: Response): Promise<any> => {
             'devicePortLogId',
             'devicePortLogDeviceId',
             'devicePortLogValue',
+            'devicePortLogName',
             'devicePortLogPortNumber'
           ],
           as: 'devicePortLogs'

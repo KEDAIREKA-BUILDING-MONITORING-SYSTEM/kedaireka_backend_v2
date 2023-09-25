@@ -13,9 +13,7 @@ export const deviceStatistic = async (req: any, res: Response): Promise<any> => 
     })
 
     const response = ResponseData.default
-    response.data = {
-      totalDevice
-    }
+    response.data = { totalDevice }
     return res.status(StatusCodes.OK).json(response)
   } catch (error: any) {
     const message = `unable to process request! error ${error.message}`

@@ -1,16 +1,14 @@
 import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
-import { DeviceModel, type DeviceAttributes } from '../../models/devices'
+import { Op } from 'sequelize'
 import { requestChecker } from '../../utilities/requestCheker'
-import { v4 as uuidv4 } from 'uuid'
+import { DevicePortLogsModel } from '../../models/devicePortLogs'
 
-export const createDevice = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as DeviceAttributes
-
+export const devicePortLogStatistic = async (req: any, res: Response): Promise<any> => {
   const emptyField = requestChecker({
-    requireList: ['deviceName', 'deviceBuildingId', 'deviceRoomId'],
-    requestData: requestBody
+    requireList: ['deviceId'],
+    requestData: req.params
   })
 
   if (emptyField.length > 0) {
@@ -20,14 +18,26 @@ export const createDevice = async (req: any, res: Response): Promise<any> => {
   }
 
   try {
-    requestBody.deviceId = uuidv4()
-    requestBody.deviceToken = uuidv4()
-    await DeviceModel.create(requestBody)
+    const logs = await DevicePortLogsModel.findAll({
+      where: {
+        deleted: { [Op.eq]: 0 },
+        devicePortLogDeviceId: { [Op.eq]: req.params.deviceId }
+      },
+      attributes: [
+        'createdAt',
+        'devicePortLogId',
+        'devicePortLogDeviceId',
+        'devicePortLogValue',
+        'devicePortLogName',
+        'devicePortLogPortNumber',
+        'devicePortLogCategory'
+      ]
+    })
 
     const response = ResponseData.default
-    const result = { message: 'success' }
-    response.data = result
-    return res.status(StatusCodes.CREATED).json(response)
+    response.data = logs
+
+    return res.status(StatusCodes.OK).json(response)
   } catch (error: any) {
     const message = `unable to process request! error ${error.message}`
     const response = ResponseData.error(message)

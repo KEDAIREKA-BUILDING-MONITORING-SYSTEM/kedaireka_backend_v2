@@ -1,15 +1,14 @@
 import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
-import { DeviceModel, type DeviceAttributes } from '../../models/devices'
 import { requestChecker } from '../../utilities/requestCheker'
 import { v4 as uuidv4 } from 'uuid'
+import { BuildingsModel, type BuildingsAttributes } from '../../models/buildings'
 
-export const createDevice = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as DeviceAttributes
-
+export const createBuilding = async (req: any, res: Response): Promise<any> => {
+  const requestBody = req.body as BuildingsAttributes
   const emptyField = requestChecker({
-    requireList: ['deviceName', 'deviceBuildingId', 'deviceRoomId'],
+    requireList: ['buildingId', 'buildingName'],
     requestData: requestBody
   })
 
@@ -20,10 +19,8 @@ export const createDevice = async (req: any, res: Response): Promise<any> => {
   }
 
   try {
-    requestBody.deviceId = uuidv4()
-    requestBody.deviceToken = uuidv4()
-    await DeviceModel.create(requestBody)
-
+    requestBody.buildingId = uuidv4()
+    await BuildingsModel.create(requestBody)
     const response = ResponseData.default
     const result = { message: 'success' }
     response.data = result
