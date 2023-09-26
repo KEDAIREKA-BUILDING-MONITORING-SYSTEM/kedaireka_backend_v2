@@ -7,7 +7,7 @@ import { type ZygoteAttributes, ZygoteModel } from './zygote'
 export interface DevicePortLogsAttributes extends ZygoteAttributes {
   devicePortLogId: string
   devicePortLogDeviceId: string
-  devicePortLogValue: string
+  devicePortLogValue: number
   devicePortLogName: string
   devicePortLogPortNumber: number
   devicePortLogCategory: string
@@ -38,7 +38,7 @@ export const DevicePortLogsModel = sequelize.define<DevicePortLogsInstance>(
       allowNull: false
     },
     devicePortLogValue: {
-      type: DataTypes.JSON,
+      type: DataTypes.NUMBER,
       allowNull: false
     },
     devicePortLogName: {

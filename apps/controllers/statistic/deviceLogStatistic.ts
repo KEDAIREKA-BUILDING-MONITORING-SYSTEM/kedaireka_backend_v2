@@ -34,8 +34,18 @@ export const devicePortLogStatistic = async (req: any, res: Response): Promise<a
       ]
     })
 
+    const port1 = logs.filter((item) => item.devicePortLogPortNumber === 1)
+    const port2 = logs.filter((item) => item.devicePortLogPortNumber === 2)
+    const port3 = logs.filter((item) => item.devicePortLogPortNumber === 3)
+    const port4 = logs.filter((item) => item.devicePortLogPortNumber === 4)
+
     const response = ResponseData.default
-    response.data = logs
+    response.data = {
+      port1,
+      port2,
+      port3,
+      port4
+    }
 
     return res.status(StatusCodes.OK).json(response)
   } catch (error: any) {

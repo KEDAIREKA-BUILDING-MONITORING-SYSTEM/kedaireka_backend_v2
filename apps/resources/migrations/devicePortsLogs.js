@@ -18,7 +18,7 @@ module.exports = {
         allowNull: false
       },
       device_port_log_value: {
-        type: Sequelize.JSON,
+        type: Sequelize.INTEGER,
         allowNull: false
       },
       device_port_log_name: {
