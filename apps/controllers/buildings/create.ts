@@ -8,7 +8,7 @@ import { BuildingsModel, type BuildingsAttributes } from '../../models/buildings
 export const createBuilding = async (req: any, res: Response): Promise<any> => {
   const requestBody = req.body as BuildingsAttributes
   const emptyField = requestChecker({
-    requireList: ['buildingId', 'buildingName'],
+    requireList: ['buildingName'],
     requestData: requestBody
   })
 

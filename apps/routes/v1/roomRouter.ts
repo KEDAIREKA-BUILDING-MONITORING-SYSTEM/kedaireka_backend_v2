@@ -12,7 +12,7 @@ export const roomRouter = (app: Express) => {
     async (req: Request, res: Response) => await roomController.findAll(req, res)
   )
   route.get(
-    '/detail/:roomId',
+    '/detail/:buildingId',
     async (req: Request, res: Response) => await roomController.findDetail(req, res)
   )
   route.post(

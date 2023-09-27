@@ -33,6 +33,19 @@ export const updateBuilding = async (req: any, res: Response): Promise<any> => {
       return res.status(StatusCodes.BAD_REQUEST).json(response)
     }
 
+    const newData: BuildingsAttributes | any = {
+      ...(requestBody.buildingName?.length > 0 && {
+        buildingName: requestBody.buildingName
+      })
+    }
+
+    await BuildingsModel.update(newData, {
+      where: {
+        deleted: { [Op.eq]: 0 },
+        buildingId: { [Op.eq]: requestBody.buildingId }
+      }
+    })
+
     const response = ResponseData.default
     const result = { message: 'success' }
     response.data = result

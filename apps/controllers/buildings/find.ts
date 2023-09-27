@@ -61,8 +61,8 @@ export const findBuildingDetail = async (req: any, res: Response): Promise<any> 
       }
     })
 
-    if (building == null) {
-      const message = 'user not found!'
+    if (building === null) {
+      const message = 'building not found!'
       const response = ResponseData.error(message)
       return res.status(StatusCodes.NOT_FOUND).json(response)
     }

@@ -4,8 +4,9 @@ import { ResponseData } from '../../utilities/response'
 import { Op } from 'sequelize'
 import { Pagination } from '../../utilities/pagination'
 import { CONSOLE } from '../../utilities/log'
-import { type RoomsAttributes, RoomsModel } from '../../models/rooms'
+import { RoomsModel } from '../../models/rooms'
 import { requestChecker } from '../../utilities/requestCheker'
+import { BuildingsModel } from '../../models/buildings'
 
 export const findAllAllRooms = async (req: any, res: Response): Promise<any> => {
   try {
@@ -16,11 +17,17 @@ export const findAllAllRooms = async (req: any, res: Response): Promise<any> => 
     const result = await RoomsModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
-
         ...(Boolean(req.query.search) && {
           [Op.or]: [{ roomName: { [Op.like]: `%${req.query.search}%` } }]
         })
       },
+      include: [
+        {
+          model: BuildingsModel,
+          as: 'building',
+          attributes: ['buildingId', 'buildingName']
+        }
+      ],
       order: [['id', 'desc']],
       ...(req.query.pagination === 'true' && {
         limit: page.limit,
@@ -40,9 +47,9 @@ export const findAllAllRooms = async (req: any, res: Response): Promise<any> => 
 }
 
 export const findDetailRoom = async (req: any, res: Response): Promise<any> => {
-  const requestParams = req.params as RoomsAttributes
+  const requestParams = req.params
   const emptyField = requestChecker({
-    requireList: ['roomId'],
+    requireList: ['buildingId'],
     requestData: requestParams
   })
 
@@ -56,8 +63,15 @@ export const findDetailRoom = async (req: any, res: Response): Promise<any> => {
     const room = await RoomsModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        roomId: { [Op.eq]: requestParams.roomId }
-      }
+        roomBuildingId: { [Op.eq]: requestParams.buildingId }
+      },
+      include: [
+        {
+          model: BuildingsModel,
+          as: 'building',
+          attributes: ['buildingId', 'buildingName']
+        }
+      ]
     })
 
     if (room == null) {

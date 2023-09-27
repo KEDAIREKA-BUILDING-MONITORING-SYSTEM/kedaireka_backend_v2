@@ -30,6 +30,7 @@ export const findAllAllDevicePortLogs = async (req: any, res: Response): Promise
       parseInt(req.query.page) ?? 0,
       parseInt(req.query.size) ?? 10
     )
+
     const result = await DevicePortLogsModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },

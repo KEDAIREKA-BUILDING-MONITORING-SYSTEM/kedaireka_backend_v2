@@ -3,6 +3,7 @@ import moment from 'moment'
 import { DataTypes, type Model, type Optional } from 'sequelize'
 import { sequelize } from '.'
 import { type ZygoteAttributes, ZygoteModel } from './zygote'
+import { BuildingsModel } from './buildings'
 
 export interface RoomsAttributes extends ZygoteAttributes {
   roomId: string
@@ -58,3 +59,9 @@ export const RoomsModel = sequelize.define<RoomsInstance>(
     }
   }
 )
+
+RoomsModel.hasOne(BuildingsModel, {
+  as: 'building',
+  sourceKey: 'roomBuildingId',
+  foreignKey: 'buildingId'
+})
