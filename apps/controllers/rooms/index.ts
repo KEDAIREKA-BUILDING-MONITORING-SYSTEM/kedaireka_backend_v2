@@ -1,7 +1,12 @@
-import { createDevicePort } from './create'
-import { updateDevicePort } from './update'
+import { createRoom } from './create'
+import { findAllAllRooms, findDetailRoom } from './find'
+import { removeRoom } from './remove'
+import { updateRoom } from './update'
 
-export const devicePortController = {
-  create: createDevicePort,
-  update: updateDevicePort
+export const roomController = {
+  create: createRoom,
+  findAll: findAllAllRooms,
+  findDetail: findDetailRoom,
+  remove: removeRoom,
+  update: updateRoom
 }

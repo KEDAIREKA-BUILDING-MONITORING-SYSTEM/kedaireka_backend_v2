@@ -2,14 +2,14 @@ import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
 import { requestChecker } from '../../utilities/requestCheker'
-import { DevicePortsModel, type DevicePortsAttributes } from '../../models/devicePorts'
 import { Op } from 'sequelize'
+import { RoomsModel, type RoomsAttributes } from '../../models/rooms'
 
-export const updateDevicePort = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as DevicePortsAttributes
+export const updateRoom = async (req: any, res: Response): Promise<any> => {
+  const requestBody = req.body as RoomsAttributes
 
   const emptyField = requestChecker({
-    requireList: ['devicePortDeviceId', 'devicePortNumber'],
+    requireList: ['buildingId'],
     requestData: requestBody
   })
 
@@ -20,22 +20,37 @@ export const updateDevicePort = async (req: any, res: Response): Promise<any> =>
   }
 
   try {
-    const deviceSensor = await DevicePortsModel.findOne({
+    const room = await RoomsModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        devicePortDeviceId: { [Op.eq]: requestBody.devicePortDeviceId },
-        devicePortNumber: { [Op.eq]: requestBody.devicePortNumber }
+        roomId: { [Op.eq]: requestBody.roomId }
       }
     })
 
-    if (deviceSensor === null) {
-      const message = 'device port not found!'
+    if (room === null) {
+      const message = 'room not found!'
       const response = ResponseData.error(message)
       return res.status(StatusCodes.BAD_REQUEST).json(response)
     }
 
-    deviceSensor.devicePortStatus = requestBody.devicePortStatus
-    await deviceSensor.save()
+    const newData: RoomsAttributes | any = {
+      ...(requestBody.roomName?.length > 0 && {
+        roomName: requestBody.roomName
+      }),
+      ...(requestBody.roomId?.length > 0 && {
+        roomId: requestBody.roomId
+      }),
+      ...(requestBody.roomBuildingId?.length > 0 && {
+        roomBuildingId: requestBody.roomBuildingId
+      })
+    }
+
+    await RoomsModel.update(newData, {
+      where: {
+        deleted: { [Op.eq]: 0 },
+        roomId: { [Op.eq]: requestBody.roomId }
+      }
+    })
 
     const response = ResponseData.default
     const result = { message: 'success' }

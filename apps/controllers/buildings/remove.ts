@@ -1,16 +1,16 @@
 import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
-import { requestChecker } from '../../utilities/requestCheker'
 import { Op } from 'sequelize'
+import { requestChecker } from '../../utilities/requestCheker'
 import { BuildingsModel, type BuildingsAttributes } from '../../models/buildings'
 
-export const updateBuilding = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as BuildingsAttributes
+export const removeBuilding = async (req: any, res: Response): Promise<any> => {
+  const requestQuery = req.query as BuildingsAttributes
 
   const emptyField = requestChecker({
     requireList: ['buildingId'],
-    requestData: requestBody
+    requestData: requestQuery
   })
 
   if (emptyField.length > 0) {
@@ -23,20 +23,22 @@ export const updateBuilding = async (req: any, res: Response): Promise<any> => {
     const building = await BuildingsModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        buildingId: { [Op.eq]: requestBody.buildingId }
+        buildingId: { [Op.eq]: requestQuery.buildingId }
       }
     })
 
-    if (building === null) {
+    if (building == null) {
       const message = 'building not found!'
       const response = ResponseData.error(message)
-      return res.status(StatusCodes.BAD_REQUEST).json(response)
+      return res.status(StatusCodes.NOT_FOUND).json(response)
     }
 
+    building.deleted = 1
+    void building.save()
+
     const response = ResponseData.default
-    const result = { message: 'success' }
-    response.data = result
-    return res.status(StatusCodes.CREATED).json(response)
+    response.data = { message: 'success' }
+    return res.status(StatusCodes.OK).json(response)
   } catch (error: any) {
     const message = `unable to process request! error ${error.message}`
     const response = ResponseData.error(message)
