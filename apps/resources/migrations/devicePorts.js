@@ -7,36 +7,35 @@ const { ZygoteModel } = require('../zygote')
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('admins', {
+    await queryInterface.createTable('device_ports', {
       ...ZygoteModel,
-      admin_id: {
+      device_port_id: {
         type: Sequelize.STRING(100),
         allowNull: false
       },
-      admin_name: {
+      device_port_device_id: {
         type: Sequelize.STRING(100),
         allowNull: false
       },
-      admin_email: {
-        type: Sequelize.STRING(100),
+      device_port_name: {
+        type: Sequelize.STRING(80),
         allowNull: false
       },
-      admin_password: {
-        type: Sequelize.STRING(200),
+      device_port_category: {
+        type: Sequelize.STRING(80),
         allowNull: false
       },
-      admin_created_by: {
-        type: Sequelize.STRING(200),
-        allowNull: true
+      device_port_number: {
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
-      admin_role: {
-        type: Sequelize.ENUM('admin', 'superAdmin'),
-        allowNull: true,
-        defaultValue: 'admin'
+      device_port_status: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
       }
     })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('admins')
+    await queryInterface.dropTable('device_ports')
   }
 }

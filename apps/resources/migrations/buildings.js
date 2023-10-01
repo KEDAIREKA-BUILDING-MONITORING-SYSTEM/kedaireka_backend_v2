@@ -7,27 +7,19 @@ const { ZygoteModel } = require('../zygote')
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('sessions', {
+    await queryInterface.createTable('buildings', {
       ...ZygoteModel,
-      session_id: {
-        type: Sequelize.STRING,
+      building_id: {
+        type: Sequelize.STRING(100),
         allowNull: false
       },
-      session_admin_id: {
-        type: Sequelize.STRING,
+      building_name: {
+        type: Sequelize.STRING(100),
         allowNull: false
-      },
-      session: {
-        type: Sequelize.STRING(255),
-        allowNull: true
-      },
-      session_expired_on: {
-        type: Sequelize.BIGINT,
-        allowNull: true
       }
     })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('sessions')
+    await queryInterface.dropTable('buildings')
   }
 }

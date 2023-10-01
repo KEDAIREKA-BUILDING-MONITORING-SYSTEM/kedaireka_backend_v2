@@ -23,7 +23,7 @@ interface AdminInstance
     AdminAttributes {}
 
 export const AdminModel = sequelize.define<AdminInstance>(
-  'admin',
+  'admins',
   {
     ...ZygoteModel,
     adminId: {
@@ -55,7 +55,7 @@ export const AdminModel = sequelize.define<AdminInstance>(
   {
     ...sequelize,
     timestamps: false,
-    tableName: 'admin',
+    tableName: 'admins',
     deletedAt: false,
     paranoid: true,
     underscored: true,

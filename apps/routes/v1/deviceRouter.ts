@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import express, { type Express, type Request, type Response } from 'express'
-import { deviceController } from '../../controllers/device'
+import { deviceController } from '../../controllers/devices'
 
 export const deviceRouter = (app: Express) => {
   const route = express.Router()
@@ -22,6 +22,10 @@ export const deviceRouter = (app: Express) => {
   route.patch(
     '/',
     async (req: Request, res: Response) => await deviceController.update(req, res)
+  )
+  route.patch(
+    '/token',
+    async (req: Request, res: Response) => await deviceController.updateToken(req, res)
   )
   route.delete(
     '/',

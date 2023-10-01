@@ -24,7 +24,7 @@ interface SessionInstance
     SessionAttributes {}
 
 export const SessionModel = sequelize.define<SessionInstance>(
-  'session',
+  'sessions',
   {
     ...ZygoteModel,
     sessionId: {
@@ -47,7 +47,7 @@ export const SessionModel = sequelize.define<SessionInstance>(
   {
     ...sequelize,
     timestamps: false,
-    tableName: 'session',
+    tableName: 'sessions',
     deletedAt: false,
     paranoid: true,
     underscored: true,
