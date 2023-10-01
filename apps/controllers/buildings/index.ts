@@ -1,11 +1,11 @@
 import { createBuilding } from './create'
-import { findAllAllBuildings, findBuildingDetail } from './find'
+import { findAllBuildings, findBuildingDetail } from './find'
 import { removeBuilding } from './remove'
 import { updateBuilding } from './update'
 
 export const buildingController = {
   create: createBuilding,
-  findAll: findAllAllBuildings,
+  findAll: findAllBuildings,
   findDetail: findBuildingDetail,
   remove: removeBuilding,
   update: updateBuilding

@@ -8,7 +8,7 @@ import { RoomsModel } from '../../models/rooms'
 import { requestChecker } from '../../utilities/requestCheker'
 import { BuildingsModel } from '../../models/buildings'
 
-export const findAllAllRooms = async (req: any, res: Response): Promise<any> => {
+export const findAllRooms = async (req: any, res: Response): Promise<any> => {
   try {
     const page = new Pagination(
       parseInt(req.query.page) ?? 0,

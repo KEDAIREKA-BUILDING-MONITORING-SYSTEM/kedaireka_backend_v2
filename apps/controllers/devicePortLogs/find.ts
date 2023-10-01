@@ -11,7 +11,7 @@ import {
 } from '../../models/devicePortLogs'
 import { type DeviceAttributes } from '../../models/devices'
 
-export const findAllAllDevicePortLogs = async (req: any, res: Response): Promise<any> => {
+export const findAllDevicePortLogs = async (req: any, res: Response): Promise<any> => {
   const requestParams = req.params as DevicePortLogsAttributes
 
   const emptyField = requestChecker({

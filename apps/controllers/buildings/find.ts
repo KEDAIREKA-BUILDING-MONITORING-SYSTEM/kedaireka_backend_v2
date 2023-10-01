@@ -3,11 +3,10 @@ import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
 import { Op } from 'sequelize'
 import { Pagination } from '../../utilities/pagination'
-import { CONSOLE } from '../../utilities/log'
 import { type BuildingsAttributes, BuildingsModel } from '../../models/buildings'
 import { requestChecker } from '../../utilities/requestCheker'
 
-export const findAllAllBuildings = async (req: any, res: Response): Promise<any> => {
+export const findAllBuildings = async (req: any, res: Response): Promise<any> => {
   try {
     const page = new Pagination(
       parseInt(req.query.page) ?? 0,
@@ -16,7 +15,6 @@ export const findAllAllBuildings = async (req: any, res: Response): Promise<any>
     const result = await BuildingsModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
-
         ...(Boolean(req.query.search) && {
           [Op.or]: [{ buildingName: { [Op.like]: `%${req.query.search}%` } }]
         })
@@ -32,7 +30,6 @@ export const findAllAllBuildings = async (req: any, res: Response): Promise<any>
     response.data = page.data(result)
     return res.status(StatusCodes.OK).json(response)
   } catch (error: any) {
-    CONSOLE.error(error.message)
     const message = `unable to process request! error ${error.message}`
     const response = ResponseData.error(message)
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response)

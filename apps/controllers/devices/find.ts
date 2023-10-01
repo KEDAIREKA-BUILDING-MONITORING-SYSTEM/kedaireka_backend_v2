@@ -11,7 +11,7 @@ import { DevicePortsModel } from '../../models/devicePorts'
 import { BuildingsModel } from '../../models/buildings'
 import { RoomsModel } from '../../models/rooms'
 
-export const findAllAllDevice = async (req: any, res: Response): Promise<any> => {
+export const findAllDevice = async (req: any, res: Response): Promise<any> => {
   try {
     const page = new Pagination(
       parseInt(req.query.page) ?? 0,

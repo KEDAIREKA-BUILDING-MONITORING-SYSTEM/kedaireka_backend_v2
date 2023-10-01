@@ -1,11 +1,11 @@
 import { createDevice } from './create'
-import { findAllAllDevice, findOneDevice } from './find'
+import { findAllDevice, findOneDevice } from './find'
 import { removeDevice } from './remove'
 import { updateDevice, updateDeviceToken } from './update'
 
 export const deviceController = {
   create: createDevice,
-  findAll: findAllAllDevice,
+  findAll: findAllDevice,
   findOne: findOneDevice,
   remove: removeDevice,
   update: updateDevice,
