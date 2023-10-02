@@ -3,41 +3,38 @@ import moment from 'moment'
 import { DataTypes, type Model, type Optional } from 'sequelize'
 import { sequelize } from '.'
 import { type ZygoteAttributes, ZygoteModel } from './zygote'
-import { BuildingsModel } from './buildings'
 
-export interface RoomsAttributes extends ZygoteAttributes {
-  roomId: string
-  roomName: string
-  roomBuildingId: string
-  roomFloorId: string
+export interface FloorsAttributes extends ZygoteAttributes {
+  floorId: string
+  floorName: string
+  floorBuildingId: string
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
-type RoomsCreationAttributes = Optional<RoomsAttributes, 'id' | 'createdAt' | 'updatedAt'>
+type FloorsCreationAttributes = Optional<
+  FloorsAttributes,
+  'id' | 'createdAt' | 'updatedAt'
+>
 
 // We need to declare an interface for our model that is basically what our class would be
-interface RoomsInstance
-  extends Model<RoomsAttributes, RoomsCreationAttributes>,
-    RoomsAttributes {}
+interface FloorsInstance
+  extends Model<FloorsAttributes, FloorsCreationAttributes>,
+    FloorsAttributes {}
 
-export const RoomsModel = sequelize.define<RoomsInstance>(
-  'rooms',
+export const FloorsModel = sequelize.define<FloorsInstance>(
+  'floors',
   {
     ...ZygoteModel,
-    roomId: {
+    floorId: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    roomName: {
+    floorName: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    roomBuildingId: {
-      type: DataTypes.STRING(100),
-      allowNull: false
-    },
-    roomFloorId: {
+    floorBuildingId: {
       type: DataTypes.STRING(100),
       allowNull: false
     }
@@ -45,7 +42,7 @@ export const RoomsModel = sequelize.define<RoomsInstance>(
   {
     ...sequelize,
     timestamps: false,
-    tableName: 'rooms',
+    tableName: 'floors',
     deletedAt: false,
     paranoid: true,
     underscored: true,
@@ -64,9 +61,3 @@ export const RoomsModel = sequelize.define<RoomsInstance>(
     }
   }
 )
-
-RoomsModel.hasOne(BuildingsModel, {
-  as: 'building',
-  sourceKey: 'roomBuildingId',
-  foreignKey: 'buildingId'
-})

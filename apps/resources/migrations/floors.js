@@ -7,27 +7,23 @@ const { ZygoteModel } = require('../zygote')
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('rooms', {
+    await queryInterface.createTable('floors', {
       ...ZygoteModel,
-      room_id: {
+      floor_id: {
         type: Sequelize.STRING(100),
         allowNull: false
       },
-      room_name: {
+      floor_name: {
         type: Sequelize.STRING(100),
         allowNull: false
       },
-      room_building_id: {
-        type: Sequelize.STRING(100),
-        allowNull: false
-      },
-      room_floor_id: {
+      floor_building_id: {
         type: Sequelize.STRING(100),
         allowNull: false
       }
     })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('rooms')
+    await queryInterface.dropTable('floors')
   }
 }
