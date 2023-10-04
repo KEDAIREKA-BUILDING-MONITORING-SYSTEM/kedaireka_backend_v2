@@ -9,7 +9,7 @@ module.exports = {
         room_id: 'sdsad-43f8-bsds-sd543534543',
         room_name: 'GKU01',
         room_building_id: 'erwer-f6ca-43f8-b8af-ewert4353454',
-        room_floor_id: ''
+        room_floor_id: 'sd4543534-445345-bsd34534-d5ty6773rwe'
       },
       {
         room_id: 'erwwerd-4334534-bsds-sd34rfgdfg5yrty',
