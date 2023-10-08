@@ -6,37 +6,37 @@ const { ZygoteModel } = require('../zygote')
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface, DataTypes) {
     await queryInterface.createTable('admins', {
       ...ZygoteModel,
       admin_id: {
-        type: Sequelize.STRING(100),
+        type: DataTypes.STRING(100),
         allowNull: false
       },
       admin_name: {
-        type: Sequelize.STRING(100),
+        type: DataTypes.STRING(100),
         allowNull: false
       },
       admin_email: {
-        type: Sequelize.STRING(100),
+        type: DataTypes.STRING(100),
         allowNull: false
       },
       admin_password: {
-        type: Sequelize.STRING(200),
+        type: DataTypes.STRING(200),
         allowNull: false
       },
       admin_created_by: {
-        type: Sequelize.STRING(200),
+        type: DataTypes.STRING(200),
         allowNull: true
       },
       admin_role: {
-        type: Sequelize.ENUM('admin', 'superAdmin'),
+        type: DataTypes.ENUM('admin', 'superAdmin'),
         allowNull: true,
         defaultValue: 'admin'
       }
     })
   },
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface, DataTypes) {
     await queryInterface.dropTable('admins')
   }
 }

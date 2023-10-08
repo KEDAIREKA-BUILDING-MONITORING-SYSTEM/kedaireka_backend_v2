@@ -12,6 +12,7 @@ import { BuildingsModel } from '../../models/buildings'
 import { RoomsModel } from '../../models/rooms'
 
 export const findAllDevice = async (req: any, res: Response): Promise<any> => {
+  console.log(req.query)
   try {
     const page = new Pagination(
       parseInt(req.query.page) ?? 0,
@@ -22,9 +23,29 @@ export const findAllDevice = async (req: any, res: Response): Promise<any> => {
         deleted: { [Op.eq]: 0 },
         ...(Boolean(req.query.search) && {
           [Op.or]: [{ deviceName: { [Op.like]: `%${req.query.search}%` } }]
+        }),
+        ...(Boolean(req.query.deviceStatus) && {
+          deviceStatus: { [Op.eq]: req.query.deviceStatus }
+        }),
+        ...(Boolean(req.query.deviceFloor) && {
+          deviceFloor: { [Op.eq]: parseInt(req.query.deviceFloor) }
+        }),
+        ...(Boolean(req.query.deviceRoomId) && {
+          deviceRoomId: { [Op.eq]: req.query.deviceRoomId }
+        }),
+        ...(Boolean(req.query.deviceBuildingId) && {
+          deviceBuildingId: { [Op.eq]: req.query.deviceBuildingId }
         })
       },
-      attributes: ['createdAt', 'updatedAt', 'deviceId', 'deviceName', 'deviceToken'],
+      attributes: [
+        'createdAt',
+        'updatedAt',
+        'deviceStatus',
+        'deviceId',
+        'deviceName',
+        'deviceFloor',
+        'deviceToken'
+      ],
       include: [
         {
           model: BuildingsModel,
