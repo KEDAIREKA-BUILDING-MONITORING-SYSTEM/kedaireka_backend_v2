@@ -9,7 +9,13 @@ export const createDevice = async (req: any, res: Response): Promise<any> => {
   const requestBody = req.body as DeviceAttributes
 
   const emptyField = requestChecker({
-    requireList: ['deviceName', 'deviceBuildingId', 'deviceRoomId'],
+    requireList: [
+      'deviceName',
+      'deviceBuildingId',
+      'deviceRoomId',
+      'deviceFloor',
+      'deviceStatus'
+    ],
     requestData: requestBody
   })
 
