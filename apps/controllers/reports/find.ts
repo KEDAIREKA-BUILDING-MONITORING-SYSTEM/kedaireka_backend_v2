@@ -4,30 +4,22 @@ import { ResponseData } from '../../utilities/response'
 import { Op } from 'sequelize'
 import { Pagination } from '../../utilities/pagination'
 import { CONSOLE } from '../../utilities/log'
-import { RoomsModel } from '../../models/rooms'
 import { requestChecker } from '../../utilities/requestCheker'
-import { BuildingsModel } from '../../models/buildings'
+import { type ReportAttributes, ReportModel } from '../../models/reports'
 
-export const findAllRooms = async (req: any, res: Response): Promise<any> => {
+export const findAllReport = async (req: any, res: Response): Promise<any> => {
   try {
     const page = new Pagination(
       parseInt(req.query.page) ?? 0,
       parseInt(req.query.size) ?? 10
     )
-    const result = await RoomsModel.findAndCountAll({
+    const result = await ReportModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
         ...(Boolean(req.query.search) && {
-          [Op.or]: [{ roomName: { [Op.like]: `%${req.query.search}%` } }]
+          [Op.or]: [{ reportMessage: { [Op.like]: `%${req.query.search}%` } }]
         })
       },
-      include: [
-        {
-          model: BuildingsModel,
-          as: 'building',
-          attributes: ['buildingId', 'buildingName']
-        }
-      ],
       order: [['id', 'desc']],
       ...(req.query.pagination === 'true' && {
         limit: page.limit,
@@ -46,10 +38,10 @@ export const findAllRooms = async (req: any, res: Response): Promise<any> => {
   }
 }
 
-export const findDetailRoom = async (req: any, res: Response): Promise<any> => {
-  const requestParams = req.params
+export const findDetailReport = async (req: any, res: Response): Promise<any> => {
+  const requestParams = req.params as ReportAttributes
   const emptyField = requestChecker({
-    requireList: ['buildingId'],
+    requireList: ['reportId'],
     requestData: requestParams
   })
 
@@ -60,28 +52,21 @@ export const findDetailRoom = async (req: any, res: Response): Promise<any> => {
   }
 
   try {
-    const room = await RoomsModel.findOne({
+    const report = await ReportModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        roomBuildingId: { [Op.eq]: requestParams.buildingId }
-      },
-      include: [
-        {
-          model: BuildingsModel,
-          as: 'building',
-          attributes: ['buildingId', 'buildingName']
-        }
-      ]
+        reportId: { [Op.eq]: requestParams.reportId }
+      }
     })
 
-    if (room == null) {
+    if (report == null) {
       const message = 'room not found!'
       const response = ResponseData.error(message)
       return res.status(StatusCodes.NOT_FOUND).json(response)
     }
 
     const response = ResponseData.default
-    response.data = room
+    response.data = report
     return res.status(StatusCodes.OK).json(response)
   } catch (error: any) {
     const message = `unable to process request! error ${error.message}`

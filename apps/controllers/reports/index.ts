@@ -1,12 +1,8 @@
-import { createRoom } from './create'
-import { findAllRooms, findDetailRoom } from './find'
-import { removeRoom } from './remove'
-import { updateRoom } from './update'
+import { reportCreate } from './create'
+import { findAllReport, findDetailReport } from './find'
 
-export const roomController = {
-  create: createRoom,
-  findAll: findAllRooms,
-  findDetail: findDetailRoom,
-  remove: removeRoom,
-  update: updateRoom
+export const reportController = {
+  create: reportCreate,
+  findAll: findAllReport,
+  findDetail: findDetailReport
 }

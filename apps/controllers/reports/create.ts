@@ -3,12 +3,12 @@ import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
 import { requestChecker } from '../../utilities/requestCheker'
 import { v4 as uuidv4 } from 'uuid'
-import { RoomsModel, type RoomsAttributes } from '../../models/rooms'
+import { type ReportAttributes, ReportModel } from '../../models/reports'
 
 export const reportCreate = async (req: any, res: Response): Promise<any> => {
-  const requestBody = req.body as RoomsAttributes
+  const requestBody = req.body as ReportAttributes
   const emptyField = requestChecker({
-    requireList: ['roomName', 'roomBuildingId'],
+    requireList: ['reportMessage', 'reportHttpStatusCode'],
     requestData: requestBody
   })
 
@@ -19,8 +19,8 @@ export const reportCreate = async (req: any, res: Response): Promise<any> => {
   }
 
   try {
-    requestBody.roomId = uuidv4()
-    await RoomsModel.create(requestBody)
+    requestBody.reportId = uuidv4()
+    await ReportModel.create(requestBody)
     const response = ResponseData.default
     const result = { message: 'success' }
     response.data = result
