@@ -23,8 +23,6 @@ export const createDevicePortLog = async (req: any, res: Response): Promise<any>
     requestData: { ...requestBody, ...req.headers }
   })
 
-  console.log(requestBody)
-
   if (emptyField.length > 0) {
     const message = `invalid request parameter! require (${emptyField})`
     const response = ResponseData.error(message)
