@@ -18,6 +18,11 @@ export const findAllReport = async (req: any, res: Response): Promise<any> => {
         deleted: { [Op.eq]: 0 },
         ...(Boolean(req.query.search) && {
           [Op.or]: [{ reportMessage: { [Op.like]: `%${req.query.search}%` } }]
+        }),
+        ...(Boolean(req.query.httpStatusCode) && {
+          [Op.or]: [
+            { reportHttpStatusCode: { [Op.like]: `%${req.query.httpStatusCode}%` } }
+          ]
         })
       },
       order: [['id', 'desc']],

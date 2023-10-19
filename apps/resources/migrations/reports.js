@@ -18,7 +18,7 @@ module.exports = {
         allowNull: false
       },
       report_http_status_code: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.INTEGER,
         allowNull: false
       }
     })

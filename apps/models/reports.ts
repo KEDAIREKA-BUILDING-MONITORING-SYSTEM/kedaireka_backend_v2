@@ -7,12 +7,15 @@ import { type ZygoteAttributes, ZygoteModel } from './zygote'
 export interface ReportAttributes extends ZygoteAttributes {
   reportId: string
   reportMessage: string
-  reportHttpStatusCode: string
+  reportHttpStatusCode: number
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
-type ReportCreationAttributes = Optional<ReportAttributes, 'id' | 'createdAt' | 'updatedAt'>
+type ReportCreationAttributes = Optional<
+  ReportAttributes,
+  'id' | 'createdAt' | 'updatedAt'
+>
 
 // We need to declare an interface for our model that is basically what our class would be
 interface ReportInstance
@@ -32,7 +35,7 @@ export const ReportModel = sequelize.define<ReportInstance>(
       allowNull: false
     },
     reportHttpStatusCode: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.NUMBER,
       allowNull: false
     }
   },
