@@ -12,7 +12,6 @@ import { BuildingsModel } from '../../models/buildings'
 import { RoomsModel } from '../../models/rooms'
 
 export const findAllDevice = async (req: any, res: Response): Promise<any> => {
-  console.log(req.query)
   try {
     const page = new Pagination(
       parseInt(req.query.page) ?? 0,

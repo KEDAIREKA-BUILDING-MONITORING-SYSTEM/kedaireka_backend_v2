@@ -5,17 +5,19 @@ import { Op } from 'sequelize'
 import { Pagination } from '../../utilities/pagination'
 import { requestChecker } from '../../utilities/requestCheker'
 import { CONSOLE } from '../../utilities/log'
-import {
-  type DevicePortLogsAttributes,
-  DevicePortLogsModel
-} from '../../models/devicePortLogs'
+import { DevicePortLogsModel } from '../../models/devicePortLogs'
 import { type DeviceAttributes } from '../../models/devices'
 
+interface IDeviceRequestParams {
+  deviceId: string
+  portNumber: string
+}
+
 export const findAllDevicePortLogs = async (req: any, res: Response): Promise<any> => {
-  const requestParams = req.params as DevicePortLogsAttributes
+  const requestParams = req.params as IDeviceRequestParams
 
   const emptyField = requestChecker({
-    requireList: ['deviceId'],
+    requireList: ['deviceId', 'portNumber'],
     requestData: requestParams
   })
 
@@ -34,7 +36,8 @@ export const findAllDevicePortLogs = async (req: any, res: Response): Promise<an
     const result = await DevicePortLogsModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
-        devicePortLogDeviceId: { [Op.eq]: requestParams.devicePortLogDeviceId },
+        devicePortLogDeviceId: { [Op.eq]: requestParams.deviceId },
+        devicePortLogPortNumber: { [Op.eq]: requestParams.portNumber },
         ...(Boolean(req.query.search) && {
           [Op.or]: [{ deviceName: { [Op.like]: `%${req.query.search}%` } }]
         })
