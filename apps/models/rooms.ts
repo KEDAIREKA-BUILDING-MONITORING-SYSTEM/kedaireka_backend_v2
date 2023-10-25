@@ -4,6 +4,7 @@ import { DataTypes, type Model, type Optional } from 'sequelize'
 import { sequelize } from '.'
 import { type ZygoteAttributes, ZygoteModel } from './zygote'
 import { BuildingsModel } from './buildings'
+import { FloorsModel } from './floor'
 
 export interface RoomsAttributes extends ZygoteAttributes {
   roomId: string
@@ -66,7 +67,13 @@ export const RoomsModel = sequelize.define<RoomsInstance>(
 )
 
 RoomsModel.hasOne(BuildingsModel, {
-  as: 'building',
+  as: 'buildings',
   sourceKey: 'roomBuildingId',
   foreignKey: 'buildingId'
+})
+
+RoomsModel.hasOne(FloorsModel, {
+  as: 'floors',
+  sourceKey: 'roomFloorId',
+  foreignKey: 'floorId'
 })
