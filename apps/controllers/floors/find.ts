@@ -4,28 +4,26 @@ import { ResponseData } from '../../utilities/response'
 import { Op } from 'sequelize'
 import { Pagination } from '../../utilities/pagination'
 import { CONSOLE } from '../../utilities/log'
-import { RoomsModel } from '../../models/rooms'
 import { requestChecker } from '../../utilities/requestCheker'
 import { BuildingsModel } from '../../models/buildings'
-import { FloorsModel } from '../../models/floor'
+import { type FloorsAttributes, FloorsModel } from '../../models/floor'
 
-export const findAllRooms = async (req: any, res: Response): Promise<any> => {
+export const findAllFloor = async (req: any, res: Response): Promise<any> => {
   try {
     const page = new Pagination(
       parseInt(req.query.page) ?? 0,
       parseInt(req.query.size) ?? 10
     )
-    const result = await RoomsModel.findAndCountAll({
+
+    console.log(req.query)
+    const result = await FloorsModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
         ...(Boolean(req.query.search) && {
-          [Op.or]: [{ roomName: { [Op.like]: `%${req.query.search}%` } }]
+          [Op.or]: [{ floorName: { [Op.like]: `%${req.query.search}%` } }]
         }),
         ...(Boolean(req.query.buildingId) && {
-          roomBuildingId: { [Op.eq]: req.query.buildingId }
-        }),
-        ...(Boolean(req.query.floorId) && {
-          roomFloorId: { [Op.eq]: req.query.floorId }
+          floorBuildingId: { [Op.eq]: req.query.buildingId }
         })
       },
       include: [
@@ -33,11 +31,6 @@ export const findAllRooms = async (req: any, res: Response): Promise<any> => {
           model: BuildingsModel,
           as: 'buildings',
           attributes: ['buildingId', 'buildingName']
-        },
-        {
-          model: FloorsModel,
-          as: 'floors',
-          attributes: ['floorId', 'floorName']
         }
       ],
       order: [['id', 'desc']],
@@ -58,10 +51,10 @@ export const findAllRooms = async (req: any, res: Response): Promise<any> => {
   }
 }
 
-export const findDetailRoom = async (req: any, res: Response): Promise<any> => {
-  const requestParams = req.params
+export const findDetailFloor = async (req: any, res: Response): Promise<any> => {
+  const requestParams = req.params as FloorsAttributes
   const emptyField = requestChecker({
-    requireList: ['buildingId'],
+    requireList: ['floorId'],
     requestData: requestParams
   })
 
@@ -72,10 +65,10 @@ export const findDetailRoom = async (req: any, res: Response): Promise<any> => {
   }
 
   try {
-    const room = await RoomsModel.findOne({
+    const room = await FloorsModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        roomBuildingId: { [Op.eq]: requestParams.buildingId }
+        floorId: { [Op.eq]: requestParams.floorId }
       },
       include: [
         {
