@@ -8,7 +8,7 @@ import { RoomsModel, type RoomsAttributes } from '../../models/rooms'
 export const createRoom = async (req: any, res: Response): Promise<any> => {
   const requestBody = req.body as RoomsAttributes
   const emptyField = requestChecker({
-    requireList: ['roomName', 'roomBuildingId'],
+    requireList: ['roomName', 'roomBuildingId', 'roomFloorId'],
     requestData: requestBody
   })
 
