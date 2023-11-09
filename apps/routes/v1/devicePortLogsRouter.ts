@@ -11,4 +11,8 @@ export const devicePortLogRouter = (app: Express) => {
     async (req: Request, res: Response) =>
       await devicePortLogsController.findAll(req, res)
   )
+  route.post(
+    '/devices/port/logs',
+    async (req: Request, res: Response) => await devicePortLogsController.create(req, res)
+  )
 }
