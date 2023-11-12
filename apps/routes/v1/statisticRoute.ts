@@ -9,11 +9,7 @@ export const statisticRouter = (app: Express) => {
   const router = express.Router()
   app.use('/api/v1/statistic', middleware.useAuthorization, router)
   router.get(
-    '/devices',
-    async (req: Request, res: Response) => await statisticController.device(req, res)
-  )
-  router.get(
-    '/devices/:deviceId',
-    async (req: Request, res: Response) => await statisticController.port(req, res)
+    '/',
+    async (req: Request, res: Response) => await statisticController.findAll(req, res)
   )
 }

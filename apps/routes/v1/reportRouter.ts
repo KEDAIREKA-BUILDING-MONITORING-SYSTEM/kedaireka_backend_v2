@@ -19,4 +19,8 @@ export const reportRouter = (app: Express) => {
     '/',
     async (req: Request, res: Response) => await reportController.create(req, res)
   )
+  route.delete(
+    '/',
+    async (req: Request, res: Response) => await reportController.remove(req, res)
+  )
 }

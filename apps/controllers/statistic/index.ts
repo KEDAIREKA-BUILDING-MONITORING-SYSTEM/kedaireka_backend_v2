@@ -1,7 +1,5 @@
-import { deviceStatistic } from './device'
-import { devicePortLogStatistic } from './deviceLogStatistic'
+import { statistic } from './statistic'
 
 export const statisticController = {
-  device: deviceStatistic,
-  port: devicePortLogStatistic
+  findAll: statistic
 }
