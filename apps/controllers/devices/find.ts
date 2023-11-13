@@ -110,6 +110,9 @@ export const findOneDevice = async (req: any, res: Response): Promise<any> => {
         },
         {
           model: DevicePortsModel,
+          // where: {
+          //   deleted: { [Op.eq]: 0 }
+          // },
           attributes: [
             'createdAt',
             'devicePortId',

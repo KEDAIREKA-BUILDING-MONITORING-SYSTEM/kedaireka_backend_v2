@@ -16,4 +16,8 @@ export const devicePortRouter = (app: Express) => {
     '/',
     async (req: Request, res: Response) => await devicePortController.update(req, res)
   )
+  route.delete(
+    '/',
+    async (req: Request, res: Response) => await devicePortController.remove(req, res)
+  )
 }
