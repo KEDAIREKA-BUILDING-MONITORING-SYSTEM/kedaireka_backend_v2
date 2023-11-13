@@ -9,7 +9,7 @@ export const updateDevicePort = async (req: any, res: Response): Promise<any> =>
   const requestBody = req.body as DevicePortsAttributes
 
   const emptyField = requestChecker({
-    requireList: ['devicePortDeviceId', 'devicePortNumber'],
+    requireList: ['devicePortId'],
     requestData: requestBody
   })
 
@@ -19,23 +19,43 @@ export const updateDevicePort = async (req: any, res: Response): Promise<any> =>
     return res.status(StatusCodes.BAD_REQUEST).json(response)
   }
 
+  console.log(requestBody)
+
   try {
-    const deviceSensor = await DevicePortsModel.findOne({
+    const port = await DevicePortsModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        devicePortDeviceId: { [Op.eq]: requestBody.devicePortDeviceId },
-        devicePortNumber: { [Op.eq]: requestBody.devicePortNumber }
+        devicePortId: { [Op.eq]: requestBody.devicePortId }
       }
     })
 
-    if (deviceSensor === null) {
+    if (port === null) {
       const message = 'device port not found!'
       const response = ResponseData.error(message)
       return res.status(StatusCodes.BAD_REQUEST).json(response)
     }
 
-    deviceSensor.devicePortStatus = requestBody.devicePortStatus
-    await deviceSensor.save()
+    const newData: DevicePortsAttributes | any = {
+      ...(requestBody.devicePortName?.length > 0 && {
+        devicePortName: requestBody.devicePortName
+      }),
+      ...(requestBody.devicePortCategory?.length > 0 && {
+        devicePortCategory: requestBody.devicePortCategory
+      }),
+      ...(requestBody.devicePortNumber !== null && {
+        devicePortNumber: requestBody.devicePortNumber
+      }),
+      ...(requestBody.devicePortStatus !== null && {
+        devicePortStatus: requestBody.devicePortStatus
+      })
+    }
+
+    await DevicePortsModel.update(newData, {
+      where: {
+        deleted: { [Op.eq]: 0 },
+        devicePortId: { [Op.eq]: requestBody.devicePortId }
+      }
+    })
 
     const response = ResponseData.default
     const result = { message: 'success' }
