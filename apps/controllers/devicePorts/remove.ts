@@ -18,8 +18,6 @@ export const removeDevicePort = async (req: any, res: Response): Promise<any> =>
     return res.status(StatusCodes.BAD_REQUEST).json(response)
   }
 
-  console.log(requestQuery)
-
   try {
     const port = await DevicePortsModel.findOne({
       where: {
