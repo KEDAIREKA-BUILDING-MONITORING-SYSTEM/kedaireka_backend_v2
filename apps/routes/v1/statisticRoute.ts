@@ -12,4 +12,8 @@ export const statisticRouter = (app: Express) => {
     '/',
     async (req: Request, res: Response) => await statisticController.findAll(req, res)
   )
+  router.get(
+    '/current',
+    async (req: Request, res: Response) => await statisticController.getCurrent(req, res)
+  )
 }
