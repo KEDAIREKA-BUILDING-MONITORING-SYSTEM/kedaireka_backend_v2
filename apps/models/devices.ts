@@ -16,6 +16,7 @@ export interface DeviceAttributes extends ZygoteAttributes {
   deviceFloor: number
   deviceToken: string
   deviceStatus: 'active' | 'inactive' | 'standby'
+  deviceTimmer: string
 }
 
 // we're telling the Model that 'id' is optional
@@ -62,6 +63,10 @@ export const DeviceModel = sequelize.define<DeviceInstance>(
       type: DataTypes.ENUM('active', 'inactive', 'standby'),
       allowNull: false,
       defaultValue: 'standby'
+    },
+    deviceTimmer: {
+      type: DataTypes.STRING(250),
+      allowNull: true
     }
   },
   {

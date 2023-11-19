@@ -45,6 +45,10 @@ module.exports = {
       device_token: {
         type: DataTypes.STRING(250),
         allowNull: false
+      },
+      device_timmer: {
+        type: DataTypes.STRING(250),
+        allowNull: true
       }
     })
   },
