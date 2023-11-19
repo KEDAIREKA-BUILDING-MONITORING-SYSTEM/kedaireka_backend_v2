@@ -1,7 +1,8 @@
-import { current } from './current'
+import { totalCurrentConsumption, allCurrentConsumption } from './current'
 import { statistic } from './statistic'
 
 export const statisticController = {
   findAll: statistic,
-  getCurrent: current
+  totalCurrentConsumption,
+  allCurrentConsumption
 }

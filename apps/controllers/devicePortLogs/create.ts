@@ -10,11 +10,18 @@ import {
 import { Op } from 'sequelize'
 import { requestChecker } from '../../utilities/requestCheker'
 import { DevicePortsModel } from '../../models/devicePorts'
+import { type ReportAttributes, ReportModel } from '../../models/reports'
 
 export const createDevicePortLog = async (req: any, res: Response): Promise<any> => {
   const requestBody = req.body as DevicePortLogsAttributes
   const emptyField = requestChecker({
-    requireList: ['devicePortLogValue', 'devicePortLogPortNumber', 'x-device-token'],
+    requireList: [
+      'devicePortLogValue',
+      'devicePortLogPortNumber',
+      'devicePortLogCategory',
+      'devicePortLogName',
+      'x-device-token'
+    ],
     requestData: { ...requestBody, ...req.headers }
   })
 
@@ -42,7 +49,9 @@ export const createDevicePortLog = async (req: any, res: Response): Promise<any>
       where: {
         deleted: { [Op.eq]: 0 },
         devicePortNumber: requestBody.devicePortLogPortNumber,
-        devicePortDeviceId: device.deviceId
+        devicePortDeviceId: device.deviceId,
+        devicePortCategory: requestBody.devicePortLogCategory,
+        devicePortName: requestBody.devicePortLogName
       },
       attributes: [
         'devicePortName',
@@ -53,7 +62,13 @@ export const createDevicePortLog = async (req: any, res: Response): Promise<any>
     })
 
     if (devicePort === null) {
-      const message = `device port ${requestBody.devicePortLogPortNumber} not registered`
+      const message = `device port ${requestBody.devicePortLogPortNumber} mismatch`
+      const reportPayload: ReportAttributes | any = {
+        reportId: uuidv4(),
+        reportMessage: message,
+        reportHttpStatusCode: 403
+      }
+      await ReportModel.create(reportPayload)
       const response = ResponseData.error(message)
       return res.status(StatusCodes.NOT_FOUND).json(response)
     }
@@ -62,6 +77,8 @@ export const createDevicePortLog = async (req: any, res: Response): Promise<any>
     requestBody.devicePortLogName = devicePort.devicePortName
     requestBody.devicePortLogDeviceId = device.deviceId
     requestBody.devicePortLogId = uuidv4()
+
+    console.log(requestBody)
     await DevicePortLogsModel.create(requestBody)
 
     const response = ResponseData.default

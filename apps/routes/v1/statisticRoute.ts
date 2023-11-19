@@ -13,7 +13,13 @@ export const statisticRouter = (app: Express) => {
     async (req: Request, res: Response) => await statisticController.findAll(req, res)
   )
   router.get(
-    '/current',
-    async (req: Request, res: Response) => await statisticController.getCurrent(req, res)
+    '/current-consumption/total',
+    async (req: Request, res: Response) =>
+      await statisticController.totalCurrentConsumption(req, res)
+  )
+  router.get(
+    '/current-consumption/list',
+    async (req: Request, res: Response) =>
+      await statisticController.allCurrentConsumption(req, res)
   )
 }
