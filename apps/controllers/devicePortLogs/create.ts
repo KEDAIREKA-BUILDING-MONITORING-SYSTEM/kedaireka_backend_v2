@@ -73,13 +73,14 @@ export const createDevicePortLog = async (req: any, res: Response): Promise<any>
       return res.status(StatusCodes.NOT_FOUND).json(response)
     }
 
-    requestBody.devicePortLogCategory = devicePort.devicePortCategory
-    requestBody.devicePortLogName = devicePort.devicePortName
-    requestBody.devicePortLogDeviceId = device.deviceId
-    requestBody.devicePortLogId = uuidv4()
-
-    console.log(requestBody)
-    await DevicePortLogsModel.create(requestBody)
+    if (devicePort.devicePortStatus) {
+      requestBody.devicePortLogCategory = devicePort.devicePortCategory
+      requestBody.devicePortLogName = devicePort.devicePortName
+      requestBody.devicePortLogDeviceId = device.deviceId
+      requestBody.devicePortLogId = uuidv4()
+      console.log(requestBody)
+      await DevicePortLogsModel.create(requestBody)
+    }
 
     const response = ResponseData.default
     const result = devicePort
