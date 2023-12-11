@@ -78,7 +78,6 @@ export const createDevicePortLog = async (req: any, res: Response): Promise<any>
       requestBody.devicePortLogName = devicePort.devicePortName
       requestBody.devicePortLogDeviceId = device.deviceId
       requestBody.devicePortLogId = uuidv4()
-      console.log(requestBody)
       await DevicePortLogsModel.create(requestBody)
     }
 
