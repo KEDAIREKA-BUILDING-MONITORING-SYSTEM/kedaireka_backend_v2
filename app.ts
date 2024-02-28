@@ -4,7 +4,6 @@ import express, { type Express } from 'express'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import { middleware } from './apps/middlewares'
 
 const app: Express = express()
 app.use(cors({ origin: true, credentials: true }))
@@ -22,8 +21,6 @@ app.use(function (req, res, next) {
 })
 
 app.use('/public', express.static('public'))
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-app.use(middleware.ipBlackList, middleware.useAuthorization)
 // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
 app.routes = appRouterV1(app)
 app.listen(CONFIG.port, () => {

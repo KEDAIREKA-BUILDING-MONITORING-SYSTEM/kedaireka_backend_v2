@@ -8,7 +8,7 @@ export const adminRouter = (app: Express): void => {
   const router = express.Router()
   app.use('/api/v1/admin', middleware.useAuthorization, router)
   router.get(
-    '/list',
+    '/',
     async (req: Request, res: Response) => await adminController.findAll(req, res)
   )
   router.get(

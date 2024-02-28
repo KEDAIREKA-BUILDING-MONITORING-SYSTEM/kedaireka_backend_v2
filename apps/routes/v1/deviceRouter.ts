@@ -8,7 +8,7 @@ export const deviceRouter = (app: Express) => {
   app.use('/api/v1/devices', route)
 
   route.get(
-    '/list',
+    '/',
     async (req: Request, res: Response) => await deviceController.findAll(req, res)
   )
   route.get(

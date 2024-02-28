@@ -19,8 +19,6 @@ export const updateDevicePort = async (req: any, res: Response): Promise<any> =>
     return res.status(StatusCodes.BAD_REQUEST).json(response)
   }
 
-  console.log(requestBody)
-
   try {
     const port = await DevicePortsModel.findOne({
       where: {

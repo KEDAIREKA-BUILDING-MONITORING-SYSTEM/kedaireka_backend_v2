@@ -8,7 +8,7 @@ export const buildingRouter = (app: Express) => {
   app.use('/api/v1/buildings', route)
 
   route.get(
-    '/list',
+    '/',
     async (req: Request, res: Response) => await buildingController.findAll(req, res)
   )
   route.get(

@@ -8,7 +8,7 @@ export const floorRouter = (app: Express) => {
   app.use('/api/v1/floors', route)
 
   route.get(
-    '/list',
+    '/',
     async (req: Request, res: Response) => await floorController.findAll(req, res)
   )
   route.get(

@@ -8,7 +8,7 @@ export const reportRouter = (app: Express) => {
   app.use('/api/v1/reports', route)
 
   route.get(
-    '/list',
+    '/',
     async (req: Request, res: Response) => await reportController.findAll(req, res)
   )
   route.get(

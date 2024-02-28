@@ -8,7 +8,7 @@ export const roomRouter = (app: Express) => {
   app.use('/api/v1/rooms', route)
 
   route.get(
-    '/list',
+    '/',
     async (req: Request, res: Response) => await roomController.findAll(req, res)
   )
   route.get(
