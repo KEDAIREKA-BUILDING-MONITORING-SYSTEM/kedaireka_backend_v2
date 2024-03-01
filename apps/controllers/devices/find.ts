@@ -37,6 +37,7 @@ export const findAllDevice = async (req: any, res: Response): Promise<any> => {
         })
       },
       attributes: [
+        'id',
         'createdAt',
         'updatedAt',
         'deviceStatus',
