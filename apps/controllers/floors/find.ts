@@ -29,7 +29,7 @@ export const findAllFloor = async (req: any, res: Response): Promise<any> => {
       include: [
         {
           model: BuildingsModel,
-          as: 'buildings',
+          as: 'building',
           attributes: ['buildingId', 'buildingName']
         }
       ],

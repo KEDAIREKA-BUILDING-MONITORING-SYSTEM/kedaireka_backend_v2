@@ -9,7 +9,7 @@ export const updateFLoor = async (req: any, res: Response): Promise<any> => {
   const requestBody = req.body as FloorsAttributes
 
   const emptyField = requestChecker({
-    requireList: ['buildingId'],
+    requireList: ['floorId'],
     requestData: requestBody
   })
 

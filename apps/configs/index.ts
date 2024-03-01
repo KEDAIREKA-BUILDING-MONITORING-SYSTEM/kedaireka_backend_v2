@@ -9,16 +9,12 @@ export const CONFIG = {
   env: process.env.APP_ENV,
   port: process.env.APP_PORT ?? 8000,
   log: process.env.APP_LOG === 'true',
-  ipBlackList: JSON.parse(process.env.IP_BLACK_LIST ?? '[]'),
+  ipBlackList: [],
   secret: {
     keyEncryption: process.env.SECRET_KEY_ENCRYPTION,
     passwordEncryption: process.env.SECRET_PASSWORD_ENCRYPTION,
     pinEncryption: process.env.SECRET_PIN_ENCRYPTION,
     token: process.env.TOKEN_SECRET
-  },
-  authorization: {
-    username: process.env.AUTHORIZATION_USERNAME,
-    passsword: process.env.AUTHORIZATION_PASSWORD
   },
   maximumUploadFile: process.env.MAXIMUM_UPLOAD_FILE ?? 1024,
   dataBase: {

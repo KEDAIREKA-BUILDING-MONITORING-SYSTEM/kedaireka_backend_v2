@@ -31,12 +31,12 @@ export const findAllRooms = async (req: any, res: Response): Promise<any> => {
       include: [
         {
           model: BuildingsModel,
-          as: 'buildings',
+          as: 'building',
           attributes: ['buildingId', 'buildingName']
         },
         {
           model: FloorsModel,
-          as: 'floors',
+          as: 'floor',
           attributes: ['floorId', 'floorName']
         }
       ],
@@ -61,7 +61,7 @@ export const findAllRooms = async (req: any, res: Response): Promise<any> => {
 export const findDetailRoom = async (req: any, res: Response): Promise<any> => {
   const requestParams = req.params
   const emptyField = requestChecker({
-    requireList: ['buildingId'],
+    requireList: ['roomBuildingId'],
     requestData: requestParams
   })
 
@@ -75,13 +75,18 @@ export const findDetailRoom = async (req: any, res: Response): Promise<any> => {
     const room = await RoomsModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        roomBuildingId: { [Op.eq]: requestParams.buildingId }
+        roomBuildingId: { [Op.eq]: requestParams.roomBuildingId }
       },
       include: [
         {
           model: BuildingsModel,
           as: 'building',
           attributes: ['buildingId', 'buildingName']
+        },
+        {
+          model: FloorsModel,
+          as: 'floor',
+          attributes: ['floorId', 'floorName']
         }
       ]
     })

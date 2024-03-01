@@ -64,7 +64,7 @@ export const FloorsModel = sequelize.define<FloorsInstance>(
 )
 
 FloorsModel.hasOne(BuildingsModel, {
-  as: 'buildings',
+  as: 'building',
   sourceKey: 'floorBuildingId',
   foreignKey: 'buildingId'
 })

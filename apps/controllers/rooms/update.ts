@@ -9,7 +9,7 @@ export const updateRoom = async (req: any, res: Response): Promise<any> => {
   const requestBody = req.body as RoomsAttributes
 
   const emptyField = requestChecker({
-    requireList: ['buildingId'],
+    requireList: ['roomId'],
     requestData: requestBody
   })
 

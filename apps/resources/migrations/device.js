@@ -17,14 +17,6 @@ module.exports = {
         type: DataTypes.STRING(100),
         allowNull: false
       },
-      device_type: {
-        type: DataTypes.STRING(100),
-        allowNull: false
-      },
-      device_category: {
-        type: DataTypes.STRING(100),
-        allowNull: false
-      },
       device_building_id: {
         type: DataTypes.STRING(80),
         allowNull: false
