@@ -7,13 +7,14 @@ import { DevicePortLogsModel } from './devicePortLogs'
 import { DevicePortsModel } from './devicePorts'
 import { BuildingsModel } from './buildings'
 import { RoomsModel } from './rooms'
+import { FloorsModel } from './floor'
 
 export interface DeviceAttributes extends ZygoteAttributes {
   deviceId: string
   deviceName: string
   deviceBuildingId: string
   deviceRoomId: string
-  deviceFloor: number
+  deviceFloorId: string
   deviceToken: string
   deviceStatus: 'active' | 'inactive' | 'standby'
   deviceTimmer: string
@@ -51,8 +52,8 @@ export const DeviceModel = sequelize.define<DeviceInstance>(
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    deviceFloor: {
-      type: DataTypes.INTEGER,
+    deviceFloorId: {
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     deviceToken: {
@@ -108,6 +109,12 @@ DeviceModel.hasOne(BuildingsModel, {
   as: 'building',
   sourceKey: 'deviceBuildingId',
   foreignKey: 'buildingId'
+})
+
+DeviceModel.hasOne(FloorsModel, {
+  as: 'floor',
+  sourceKey: 'deviceFloorId',
+  foreignKey: 'floorId'
 })
 
 DeviceModel.hasOne(RoomsModel, {

@@ -13,10 +13,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      user_name: {
-        type: Sequelize.STRING(80),
-        allowNull: false
-      },
       user_email: {
         type: Sequelize.STRING(100),
         allowNull: false
@@ -25,14 +21,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      user_phone_number: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
       user_role: {
-        type: Sequelize.ENUM('user', 'admin', 'superAdmin'),
+        type: Sequelize.ENUM('admin', 'superAdmin'),
         allowNull: false,
-        defaultValue: 'user'
+        defaultValue: 'admin'
       }
     })
   },

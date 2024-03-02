@@ -10,6 +10,7 @@ import { DevicePortLogsModel } from '../../models/devicePortLogs'
 import { DevicePortsModel } from '../../models/devicePorts'
 import { BuildingsModel } from '../../models/buildings'
 import { RoomsModel } from '../../models/rooms'
+import { FloorsModel } from '../../models/floor'
 
 export const findAllDevice = async (req: any, res: Response): Promise<any> => {
   try {
@@ -43,7 +44,6 @@ export const findAllDevice = async (req: any, res: Response): Promise<any> => {
         'deviceStatus',
         'deviceId',
         'deviceName',
-        'deviceFloor',
         'deviceToken'
       ],
       include: [
@@ -51,6 +51,11 @@ export const findAllDevice = async (req: any, res: Response): Promise<any> => {
           model: BuildingsModel,
           as: 'building',
           attributes: ['buildingId', 'buildingName']
+        },
+        {
+          model: FloorsModel,
+          as: 'floor',
+          attributes: ['floorId', 'floorName']
         },
         {
           model: RoomsModel,

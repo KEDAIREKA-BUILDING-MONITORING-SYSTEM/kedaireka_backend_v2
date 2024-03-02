@@ -4,7 +4,6 @@ import { type Express, type Request, type Response } from 'express'
 import { index } from '../../controllers'
 import { userRoutes } from './userRouter'
 import { uploadFileRoutes } from './uploadFileRoute'
-import { adminRouter } from './adminRouter'
 import { myProfileRouter } from './myProfileRouter'
 import { deviceRouter } from './deviceRouter'
 import { devicePortRouter } from './devicePortRouter '
@@ -20,7 +19,6 @@ export const appRouterV1 = (app: Express) => {
   app.get('/api/v1', async (req: Request, res: Response) => await index(req, res))
   userRoutes(app)
   uploadFileRoutes(app)
-  adminRouter(app)
   statisticRouter(app)
   myProfileRouter(app)
   deviceRouter(app)

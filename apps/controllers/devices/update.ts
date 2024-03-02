@@ -44,8 +44,8 @@ export const updateDevice = async (req: any, res: Response): Promise<any> => {
       ...(requestBody.deviceBuildingId?.length > 0 && {
         deviceBuildingId: requestBody.deviceBuildingId
       }),
-      ...(requestBody.deviceFloor.toString()?.length > 0 && {
-        deviceFloor: requestBody.deviceFloor
+      ...(requestBody.deviceFloorId?.length > 0 && {
+        deviceFloor: requestBody.deviceFloorId
       }),
       ...(requestBody.deviceStatus?.length > 0 && {
         deviceStatus: requestBody.deviceStatus

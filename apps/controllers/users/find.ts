@@ -15,21 +15,12 @@ export const findAllUser = async (req: any, res: Response): Promise<any> => {
     const users = await UserModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
+        userId: { [Op.not]: req.body?.user?.userId },
         ...(Boolean(req.query.search) && {
-          [Op.or]: [
-            { userName: { [Op.like]: `%${req.query.search}%` } },
-            { userEmail: { [Op.like]: `%${req.query.search}%` } }
-          ]
+          [Op.or]: [{ userEmail: { [Op.like]: `%${req.query.search}%` } }]
         })
       },
-      attributes: [
-        'userId',
-        'userName',
-        'userEmail',
-        'userPhoneNumber',
-        'createdAt',
-        'updatedAt'
-      ],
+      attributes: ['id', 'userId', 'userEmail', 'userRole', 'createdAt', 'updatedAt'],
       order: [['id', 'desc']],
       ...(req.query.pagination === 'true' && {
         limit: page.limit,
@@ -66,14 +57,7 @@ export const findOneUser = async (req: any, res: Response): Promise<any> => {
         deleted: { [Op.eq]: 0 },
         userId: { [Op.eq]: requestParams.userId }
       },
-      attributes: [
-        'userId',
-        'userName',
-        'userEmail',
-        'userPhoneNumber',
-        'createdAt',
-        'updatedAt'
-      ]
+      attributes: ['userId', 'userEmail', 'createdAt', 'updatedAt']
     })
 
     if (user == null) {

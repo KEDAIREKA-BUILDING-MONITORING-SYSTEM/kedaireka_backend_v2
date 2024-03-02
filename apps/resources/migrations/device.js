@@ -25,8 +25,8 @@ module.exports = {
         type: DataTypes.STRING(50),
         allowNull: false
       },
-      device_floor: {
-        type: DataTypes.INTEGER,
+      device_floor_id: {
+        type: DataTypes.STRING,
         allowNull: false
       },
       device_status: {

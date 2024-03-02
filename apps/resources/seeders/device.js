@@ -10,7 +10,7 @@ module.exports = {
         device_name: 'dht ku',
         device_building_id: 'erwer-f6ca-43f8-b8af-ewert4353454',
         device_room_id: 'sdsad-43f8-bsds-sd543534543',
-        device_floor: 1,
+        device_floor_id: '',
         device_token: 'sdsad-46bb-82fb-werwr4345345345',
         device_status: 'standby'
       },
@@ -19,7 +19,7 @@ module.exports = {
         device_name: 'monitoring suhu',
         device_building_id: 'erwer-f6ca-43f8-b8af-ewert4353454',
         device_room_id: 'sdsad-43f8-bsds-sd543534543',
-        device_floor: 5,
+        device_floor_id: '',
         device_token: 'ewrwer455-dfgdfgdf0-tyty57676',
         device_status: 'active'
       },
@@ -28,7 +28,7 @@ module.exports = {
         device_name: 'monitoring AC',
         device_building_id: 'erwer-f6ca-43f8-b8af-ewert4353454',
         device_room_id: 'sdsad-43f8-bsds-sd543534543',
-        device_floor: 4,
+        device_floor_id: '',
         device_token: 'erwerwer1kjl-rtyry-drfwertwer',
         device_status: 'inactive'
       },
@@ -37,7 +37,7 @@ module.exports = {
         device_name: 'monitoring SS',
         device_building_id: 'erwer-f6ca-43f8-b8af-ewert4353454',
         device_room_id: 'sdsad-43f8-bsds-sd543534543',
-        device_floor: 5,
+        device_floor_id: '',
         device_token: 'sdsad-tyu567-fgsdfgdfgdfg-ertert',
         device_status: 'inactive'
       }

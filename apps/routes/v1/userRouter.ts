@@ -19,6 +19,14 @@ export const userRoutes = (app: Express): void => {
     middleware.useAuthorization,
     async (req: Request, res: Response) => await UsersController.findOne(req, res)
   )
+  router.patch(
+    '/',
+    async (req: Request, res: Response) => await UsersController.update(req, res)
+  )
+  router.delete(
+    '/',
+    async (req: Request, res: Response) => await UsersController.remove(req, res)
+  )
   router.post(
     '/login',
     async (req: Request, res: Response) => await UsersController.login(req, res)

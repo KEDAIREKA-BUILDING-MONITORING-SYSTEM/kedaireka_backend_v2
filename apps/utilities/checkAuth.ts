@@ -1,17 +1,17 @@
 import { Op } from 'sequelize'
-import { AdminModel } from '../models/admin'
+import { UserModel } from '../models/user'
 
 interface IsSuperAdminType {
-  adminId: string
+  userId: string
 }
 
-export const isSuperAdmin = async ({ adminId }: IsSuperAdminType): Promise<boolean> => {
-  const checkAdmin = await AdminModel.findOne({
+export const isSuperAdmin = async ({ userId }: IsSuperAdminType): Promise<boolean> => {
+  const checkAdmin = await UserModel.findOne({
     raw: true,
     where: {
       deleted: { [Op.eq]: 0 },
-      adminId: { [Op.eq]: adminId },
-      adminRole: { [Op.eq]: 'superAdmin' }
+      userId: { [Op.eq]: userId },
+      userRole: { [Op.eq]: 'superAdmin' }
     }
   })
   return checkAdmin != null

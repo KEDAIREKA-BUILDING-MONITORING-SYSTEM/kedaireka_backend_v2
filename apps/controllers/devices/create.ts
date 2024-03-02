@@ -8,12 +8,14 @@ import { v4 as uuidv4 } from 'uuid'
 export const createDevice = async (req: any, res: Response): Promise<any> => {
   const requestBody = req.body as DeviceAttributes
 
+  console.log(requestBody)
+
   const emptyField = requestChecker({
     requireList: [
       'deviceName',
       'deviceBuildingId',
       'deviceRoomId',
-      'deviceFloor',
+      'deviceFloorId',
       'deviceStatus'
     ],
     requestData: requestBody
