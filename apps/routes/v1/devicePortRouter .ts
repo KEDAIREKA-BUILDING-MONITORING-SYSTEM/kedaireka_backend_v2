@@ -6,6 +6,10 @@ import { devicePortController } from '../../controllers/devicePorts'
 export const devicePortRouter = (app: Express) => {
   const route = express.Router()
   app.use('/api/v1/devices/ports', route)
+  route.get(
+    '/',
+    async (req: Request, res: Response) => await devicePortController.findAll(req, res)
+  )
   route.post(
     '/',
     async (req: Request, res: Response) => await devicePortController.create(req, res)
