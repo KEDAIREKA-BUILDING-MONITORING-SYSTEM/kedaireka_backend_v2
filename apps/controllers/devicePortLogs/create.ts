@@ -19,7 +19,6 @@ export const createDevicePortLog = async (req: any, res: Response): Promise<any>
       'devicePortLogValue',
       'devicePortLogPortNumber',
       'devicePortLogCategory',
-      'devicePortLogName',
       'x-device-token'
     ],
     requestData: { ...requestBody, ...req.headers }
@@ -30,6 +29,8 @@ export const createDevicePortLog = async (req: any, res: Response): Promise<any>
     const response = ResponseData.error(message)
     return res.status(StatusCodes.BAD_REQUEST).json(response)
   }
+
+  console.log(requestBody)
 
   try {
     const device = await DeviceModel.findOne({
@@ -52,12 +53,7 @@ export const createDevicePortLog = async (req: any, res: Response): Promise<any>
         devicePortDeviceId: device.deviceId,
         devicePortCategory: requestBody.devicePortLogCategory
       },
-      attributes: [
-        'devicePortName',
-        'devicePortCategory',
-        'devicePortNumber',
-        'devicePortStatus'
-      ]
+      attributes: ['devicePortCategory', 'devicePortNumber', 'devicePortStatus']
     })
 
     if (devicePort === null) {

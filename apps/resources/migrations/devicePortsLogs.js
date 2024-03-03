@@ -23,7 +23,7 @@ module.exports = {
       },
       device_port_log_name: {
         type: DataTypes.STRING(80),
-        allowNull: false
+        allowNull: true
       },
       device_port_log_port_number: {
         type: DataTypes.INTEGER,

@@ -43,7 +43,7 @@ export const DevicePortLogsModel = sequelize.define<DevicePortLogsInstance>(
     },
     devicePortLogName: {
       type: DataTypes.STRING(80),
-      allowNull: false
+      allowNull: true
     },
     devicePortLogPortNumber: {
       type: DataTypes.NUMBER,
