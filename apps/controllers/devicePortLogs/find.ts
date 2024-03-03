@@ -5,28 +5,12 @@ import { Op } from 'sequelize'
 import { Pagination } from '../../utilities/pagination'
 import { requestChecker } from '../../utilities/requestCheker'
 import { CONSOLE } from '../../utilities/log'
-import { DevicePortLogsModel } from '../../models/devicePortLogs'
-import { type DeviceAttributes } from '../../models/devices'
-
-interface IDeviceRequestParams {
-  deviceId: string
-  portNumber: string
-}
+import {
+  type DevicePortLogsAttributes,
+  DevicePortLogsModel
+} from '../../models/devicePortLogs'
 
 export const findAllDevicePortLogs = async (req: any, res: Response): Promise<any> => {
-  const requestParams = req.params as IDeviceRequestParams
-
-  const emptyField = requestChecker({
-    requireList: ['deviceId', 'portNumber'],
-    requestData: requestParams
-  })
-
-  if (emptyField.length > 0) {
-    const message = `invalid request parameter! require (${emptyField})`
-    const response = ResponseData.error(message)
-    return res.status(StatusCodes.BAD_REQUEST).json(response)
-  }
-
   try {
     const page = new Pagination(
       parseInt(req.query.page) ?? 0,
@@ -36,10 +20,11 @@ export const findAllDevicePortLogs = async (req: any, res: Response): Promise<an
     const result = await DevicePortLogsModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
-        devicePortLogDeviceId: { [Op.eq]: requestParams.deviceId },
-        devicePortLogPortNumber: { [Op.eq]: requestParams.portNumber },
         ...(Boolean(req.query.search) && {
           [Op.or]: [{ deviceName: { [Op.like]: `%${req.query.search}%` } }]
+        }),
+        ...(Boolean(req.query.deviceId) && {
+          devicePortLogDeviceId: { [Op.eq]: req.query.deviceId }
         })
       },
       order: [['id', 'desc']],
@@ -61,10 +46,10 @@ export const findAllDevicePortLogs = async (req: any, res: Response): Promise<an
 }
 
 export const findOneDevicePortLogs = async (req: any, res: Response): Promise<any> => {
-  const requestParams = req.params as DeviceAttributes
+  const requestParams = req.params as DevicePortLogsAttributes
 
   const emptyField = requestChecker({
-    requireList: ['deviceId'],
+    requireList: ['devicePortLogId'],
     requestData: requestParams
   })
 
@@ -78,7 +63,7 @@ export const findOneDevicePortLogs = async (req: any, res: Response): Promise<an
     const result = await DevicePortLogsModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        devicePortLogId: { [Op.eq]: requestParams.deviceId }
+        devicePortLogId: { [Op.eq]: requestParams.devicePortLogId }
       },
       attributes: ['createdAt', 'deviceLogId', 'deviceLogDeviceId', 'deviceLogValue']
     })

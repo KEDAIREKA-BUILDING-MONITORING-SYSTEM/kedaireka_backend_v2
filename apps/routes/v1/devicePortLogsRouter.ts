@@ -7,7 +7,7 @@ export const devicePortLogRouter = (app: Express) => {
   const route = express.Router()
   app.use('/api/v1/', route)
   route.get(
-    '/devices/:deviceId/ports/:portNumber/logs',
+    '/devices/ports/logs',
     async (req: Request, res: Response) =>
       await devicePortLogsController.findAll(req, res)
   )

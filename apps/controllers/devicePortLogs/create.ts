@@ -50,8 +50,7 @@ export const createDevicePortLog = async (req: any, res: Response): Promise<any>
         deleted: { [Op.eq]: 0 },
         devicePortNumber: requestBody.devicePortLogPortNumber,
         devicePortDeviceId: device.deviceId,
-        devicePortCategory: requestBody.devicePortLogCategory,
-        devicePortName: requestBody.devicePortLogName
+        devicePortCategory: requestBody.devicePortLogCategory
       },
       attributes: [
         'devicePortName',
@@ -82,8 +81,7 @@ export const createDevicePortLog = async (req: any, res: Response): Promise<any>
     }
 
     const response = ResponseData.default
-    const result = devicePort
-    response.data = result
+    response.data = { message: 'success' }
     return res.status(StatusCodes.CREATED).json(response)
   } catch (error: any) {
     const message = `unable to process request! error ${error.message}`

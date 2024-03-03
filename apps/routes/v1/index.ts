@@ -14,6 +14,7 @@ import { reportRouter } from './reportRouter'
 import { devicePortLogRouter } from './devicePortLogsRouter'
 import { floorRouter } from './floorRouter'
 import { layoutRouter } from './layoutRouter'
+import { deviceChartRouter } from './deviceChartRouter'
 
 export const appRouterV1 = (app: Express) => {
   app.get('/api/v1', async (req: Request, res: Response) => await index(req, res))
@@ -29,4 +30,5 @@ export const appRouterV1 = (app: Express) => {
   reportRouter(app)
   devicePortLogRouter(app)
   layoutRouter(app)
+  deviceChartRouter(app)
 }

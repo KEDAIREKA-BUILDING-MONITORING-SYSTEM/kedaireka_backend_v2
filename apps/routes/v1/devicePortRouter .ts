@@ -10,6 +10,10 @@ export const devicePortRouter = (app: Express) => {
     '/',
     async (req: Request, res: Response) => await devicePortController.findAll(req, res)
   )
+  route.get(
+    '/detail/:devicePortId',
+    async (req: Request, res: Response) => await devicePortController.findDetial(req, res)
+  )
   route.post(
     '/',
     async (req: Request, res: Response) => await devicePortController.create(req, res)
